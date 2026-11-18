@@ -1,0 +1,3 @@
+import public forge {
+    reverse_proxy forgejo:80
+}

@@ -1,0 +1,4 @@
+[Build]
+ImageTag=localhost/caddy:latest
+File=caddy.Containerfile
+SetWorkingDirectory=./build/

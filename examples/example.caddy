@@ -1,0 +1,10 @@
+# change import between public, protected, and private to change between being fully exposed,
+# reachable only behind a cloudflare tunnel, and only reachable via the netbird network.
+import public example {
+    reverse_proxy myinternalhost:8080
+}
+
+# An additional arg lets you specific a non-standard port. Doesn't work with protected
+import public example :8080 {
+    reverse_proxy myinternalhost:8080
+}

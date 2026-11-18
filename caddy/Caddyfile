@@ -1,0 +1,53 @@
+{
+# Set the ACME DNS challenge provider to use Cloudflare for all sites
+    acme_dns cloudflare {file./run/secrets/cloudflare_api_token}
+
+    dynamic_dns {
+        provider cloudflare {file./run/secrets/cloudflare_api_token}
+        domains {
+            ${DOMAIN} @
+        }
+        dynamic_domains
+    }
+	# Only needed if you want logs/handlers to see the real visitor IP via the tunnel.
+	servers {
+		trusted_proxies static 127.0.0.1/32 ::1/128
+		client_ip_headers Cf-Connecting-Ip
+	}
+
+}
+	@denied not remote_ip 100.64.0.0/10
+	respond @denied "Forbidden" 403
+}
+
+(cloudflared_only) {
+	@denied not remote_ip 127.0.0.1 ::1
+	respond @denied "Forbidden" 403
+}
+
+# TODO: also include LAN access
+(private) {
+	{args[0]}.p.{$DOMAIN}{args[1]} {
+		import netbird_only
+		{block}
+	}
+}
+
+(protected) {
+	{args[0]}.{$DOMAIN} {
+		import cloudflared_only
+		{block}
+	}
+}
+
+(public) {
+	{args[0]}.{$DOMAIN} {
+		{block}
+	}
+}
+
+${DOMAIN} {
+
+}
+
+import caddy.d/*.caddy

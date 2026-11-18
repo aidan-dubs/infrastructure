@@ -1,0 +1,22 @@
+[Container]
+AddCapability=NET_ADMIN
+AutoUpdate=registry
+ContainerName=caddy
+Image=caddy.build
+LogDriver=journald
+Network=host
+PublishPort=80:80
+PublishPort=443:443
+PublishPort=443:443/udp
+Pull=missing
+Secret=cloudflare_api_token
+Volume=/etc/caddy:/etc/caddy:Z
+Volume=caddy_data.volume:/data
+Volume=caddy_config.volume:/config
+
+[Service]
+Restart=always
+ExecReload=/usr/bin/podman exec -w /etc/caddy caddy caddy reload --config /etc/caddy/Caddyfile --force
+
+[Install]
+WantedBy=default.targe

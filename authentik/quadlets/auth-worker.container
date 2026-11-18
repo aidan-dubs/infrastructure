@@ -1,0 +1,34 @@
+[Container]
+ContainerName=auth-worker
+Environment=AUTHENTIK_POSTGRESQL__HOST=auth-db
+Environment=AUTHENTIK_POSTGRESQL__NAME=authentik
+; Environment=AUTHENTIK_POSTGRESQL__PASSWORD=PG_PASS
+Environment=AUTHENTIK_POSTGRESQL__USER=authentik
+; Environment="AUTHENTIK_SECRET_KEY=secret key required"
+Environment=DOCKER_HOST=tcp://socket-proxy:2375
+Exec=worker
+Image=ghcr.io/goauthentik/server:2026.8.5
+ShmSize=512mb
+User=root
+Volume=auth-data:/data
+Volume=auth-certs:/certs
+Volume=auth-templates:/templates
+Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
+Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
+Volume=/etc/auth-blueprints:/blueprints/custom:ro,z
+Network=auth.network
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Unit]
+Requires=auth-sockproxy.service auth-db.service
+After=auth-sockproxy.service auth-db.service
+
+Requires=podman-secret-gen@PG_PASS.service
+After=podman-secret-gen@PG_PASS.service
+Requires=podman-secret-gen@AUTHENTIK_SECRET_KEY.service
+After=podman-secret-gen@AUTHENTIK_SECRET_KEY.service
