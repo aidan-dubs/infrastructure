@@ -5,6 +5,7 @@ help:
     @just --list
 
 
+all: env secrets forgjeo authentik caddy
 
 env:
     #!/usr/bin/env bash
@@ -27,7 +28,15 @@ secrets:
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exist /usr/local/bin/
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exists@.service /etc/systemd/system/
 
+caddy: env
+    sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
+    sudo install -CD ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD ./caddy/Caddyfile /etc/caddy/
+
 forgejo: env secrets
+    #!/usr/bin/env bash
+    set -euo pipefail
+
     sudo podman quadlet install --application forgjeo --reload-systemd --replace ./forgejo/quadlets/
     TMPFILE=$(mktemp --suffix .conf) || exit 1
     trap 'rm -f "$TMPFILE"' EXIT
@@ -36,12 +45,18 @@ forgejo: env secrets
     sudo install -CD $TMPFILE /etc/forgejo/app.ini
 
     sudo install -CD ./forgejo/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
 
-forgejo-runner:
-    sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
+authentik: env secrets
+    sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
 
-netbird: 
-    sudo podman quadlet install --application netbird --reload-systemd --replace ./netbird/quadlets/
-    sudo install -CD -m 755 -o root -g root ./netbird/management.json /etc/netbird/management.json
-    sudo install -CD -m 755 -o root -g root ./netbird/turnserver.conf /etc/turnserver.conf
-    sudo install -CD -m 755 -o root -g root ./netbird/netbird.caddy /etc/caddy/caddy.d/netbird.conf
+    sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
+
+# forgejo-runner:
+#     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
+#
+# netbird: 
+#     sudo podman quadlet install --application netbird --reload-systemd --replace ./netbird/quadlets/
+#     sudo install -CD -m 755 -o root -g root ./netbird/management.json /etc/netbird/management.json
+#     sudo install -CD -m 755 -o root -g root ./netbird/turnserver.conf /etc/turnserver.conf
+#     sudo install -CD -m 755 -o root -g root ./netbird/netbird.caddy /etc/caddy/caddy.d/netbird.conf
