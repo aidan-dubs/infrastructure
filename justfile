@@ -8,8 +8,16 @@ help:
 
 
 [default]
-all: caddy authentik restart reload
+all: caddy authentik selinux restart reload
 
+selinux:
+    #!/usr/bin/env bash
+
+    set -euo pipefail
+
+    for file in /etc/custom-selinux/*.mods; do
+        sudo semanage import -f "$file"
+    done
 
 tmpfiles:
     sudo systemd-tmpfiles --dry-run --create
@@ -23,6 +31,8 @@ reload: tmpfiles
 
 containers-user:
     #!/usr/bin/env bash
+
+    set -euo pipefail
 
     RANGE="1000000:1048576"
     POD_USER=containers
@@ -53,10 +63,10 @@ env:
     TMPFILE=$(mktemp --suffix .conf) || exit 1
     trap 'rm -f "$TMPFILE"' EXIT
 
-    envsubst '$DOMAIN' < ./etc/environment.d/domain.conf > $TMPFILE
+    envsubst '$DOMAIN' < ./common/environment.d/domain.conf > $TMPFILE
     sudo install -CD -m 644 -o root -g root $TMPFILE /etc/environment.d/domain.conf
 
-    envsubst '$DOMAIN' < ./etc/systemd/system.conf.d/domain-env.conf > $TMPFILE
+    envsubst '$DOMAIN' < ./common/systemd/system.conf.d/domain-env.conf > $TMPFILE
     sudo install -CD -m 644 -o root -g root $TMPFILE /etc/systemd/system.conf.d/domain-env.conf
 
 secrets:
@@ -65,7 +75,11 @@ secrets:
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exist /usr/local/bin/
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exists@.service /etc/systemd/system/
 
-setup: env containers-user secrets
+common: 
+    sudo install -CD -m 755 -o root -g root ./common/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+
+setup: common env containers-user secrets
 
 caddy: setup
     sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
