@@ -5,7 +5,7 @@
     dynamic_dns {
         provider cloudflare {file./run/secrets/cloudflare_api_token}
         domains {
-            ${DOMAIN} @
+            {$DOMAIN} @
         }
         dynamic_domains
     }
@@ -48,7 +48,7 @@
 	}
 }
 
-${DOMAIN} {
+{$DOMAIN} {
 
 }
 
