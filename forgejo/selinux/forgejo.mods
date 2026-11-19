@@ -1,0 +1,1 @@
+fcontext -a -t container_file_t '/etc/forgejo(/.*)?'
