@@ -21,3 +21,6 @@ else
         --scopes profile \
         --scopes email
 fi
+
+
+Exec=sh -c 'i=$(forgejo admin auth list --config /etc/forgejo/app.ini | grep authentik | cut -f1); c=add-oauth; [ -n "$i" ] && c="update-oauth --id $i"; forgejo admin auth $c --config /etc/forgejo/app.ini --name authentik --provider openidConnect --key "$(cat /run/secrets/forgejo-oauth-client-id)" --secret "$(cat /run/secrets/forgejo-oauth-client-secret)" --auto-discover-url "https://auth.$DOMAIN/application/o/forgejo/.well-known/openid-configuration" --scopes openid --scopes profile --scopes email'

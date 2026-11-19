@@ -1,0 +1,25 @@
+[Unit]
+Requires=dashboard.service
+After=dashboard.service
+
+[Container]
+Exec=--config /etc/netbird/config.yaml
+Image=netbirdio/netbird-server:latest
+PublishPort=3478:3478/udp
+Volume=netbird-data.volume:/var/lib/netbird
+Volume=/etc/netbird/config.yaml:/etc/netbird/config.yaml
+Environment=NB_EXPOSED_ADDRESS=https://net.${DOMAIN}:443
+Secret=netbird-auth-secret,type=env,target=NB_AUTH_SECRET
+Secret=netbird-encryption-key,type=env,target=NB_STORE_ENCRYPTION_KEY
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+[Unit]
+Requires=podman-secret-gen@netbird-encryption-key.service
+After=podman-secret-gen@netbird-encryption-key.service
+Requires=podman-secret-gen@netbird-auth-secret.service
+After=podman-secret-gen@netbird-auth-secret.service

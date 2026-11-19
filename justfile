@@ -5,7 +5,7 @@ help:
 
 
 [default]
-all: core forgejo restart reload
+all: core forgejo netbird restart reload
 
 selinux:
     #!/usr/bin/env bash
@@ -126,11 +126,12 @@ forgejo: core
     sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
 
+netbird: core
+    sudo install -CD ./netbird/netbird.caddy /etc/caddy/caddy.d/
+    sudo install -CD ./netbird/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird.yaml /etc/authentik/blueprints/
+    sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
 #
-# netbird: 
-#     sudo podman quadlet install --application netbird --reload-systemd --replace ./netbird/quadlets/
-#     sudo install -CD -m 755 -o root -g root ./netbird/management.json /etc/netbird/management.json
-#     sudo install -CD -m 755 -o root -g root ./netbird/turnserver.conf /etc/turnserver.conf
-#     sudo install -CD -m 755 -o root -g root ./netbird/netbird.caddy /etc/caddy/caddy.d/netbird.conf

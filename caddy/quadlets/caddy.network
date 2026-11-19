@@ -1,2 +1,3 @@
 [Network]
 NetworkName=caddy
+Subnet=10.12.0.0/16

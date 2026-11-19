@@ -4,7 +4,7 @@ AutoUpdate=registry
 ContainerName=caddy
 UserNS=auto
 Image=caddy.build
-Network=caddy.network
+Network=caddy.network:ip=10.12.0.5
 PublishPort=80:80
 PublishPort=443:443
 Pull=missing
