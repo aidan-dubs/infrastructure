@@ -1,15 +1,15 @@
 [Container]
 Environment=NETBIRD_MGMT_API_ENDPOINT=https://net.${DOMAIN}
 Environment=NETBIRD_MGMT_GRPC_API_ENDPOINT=https://net.${DOMAIN}
-Environment=AUTH_AUTHORITY=https://auth.${DOMAIN}/application/o/netbird/
+Environment=AUTH_AUTHORITY=https://net.${DOMAIN}/oauth2
+Environment=AUTH_CLIENT_ID=netbird-dashboard
+Environment=AUTH_CLIENT_SECRET=
+Environment=AUTH_AUDIENCE=netbird-dashboard
 Environment=USE_AUTH0=false
 Environment=AUTH_SUPPORTED_SCOPES=openid profile email groups
 Environment=AUTH_REDIRECT_URI=/nb-auth
 Environment=AUTH_SILENT_REDIRECT_URI=/nb-silent-auth
 Image=docker.io/netbirdio/dashboard:latest
-Secret=netbird-oauth-client-secret,type=env,target=AUTH_CLIENT_SECRET
-Secret=netbird-oauth-client-id,type=env,target=AUTH_CLIENT_ID
-Secret=netbird-oauth-client-id,type=env,target=AUTH_AUDIENCE
 ContainerName=netbird-dashboard
 Network=caddy.network
 Network=netbird.network

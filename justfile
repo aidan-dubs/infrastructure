@@ -22,7 +22,11 @@ tmpfiles:
 core-tmpfiles:
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
-post: tmpfiles selinux 
+daemon-reload:
+    sudo systemctl daemon-reload
+
+
+post: tmpfiles selinux daemon-reload
 
 restart: post
     sudo systemctl restart authentik.target forgejo netbird-server netbird-dashboard
