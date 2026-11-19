@@ -12,7 +12,7 @@ all: caddy restart reload
 
 tmpfiles:
     sudo systemd-tmpfiles --dry-run --create
-    sudo systemd-tmpfiles --create
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
 restart: tmpfiles
     sudo systemctl restart authentik
