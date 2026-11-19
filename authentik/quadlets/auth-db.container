@@ -9,7 +9,7 @@ HealthRetries=5
 HealthStartPeriod=20s
 HealthTimeout=5s
 Image=docker.io/library/postgres:16-alpine
-Volume=auth-database.volume:/var/lib/postgresql/data
+Volume=auth-database.volume:/var/lib/postgresql/data:U
 Secret=PG_PASS,type=env,target=POSTGRES_PASSWORD
 Network=auth.network
 UserNS=auto
