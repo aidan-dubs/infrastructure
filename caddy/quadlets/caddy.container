@@ -2,8 +2,8 @@
 AddCapability=NET_ADMIN
 AutoUpdate=registry
 ContainerName=caddy
+UserNS=auto
 Image=caddy.build
-LogDriver=journald
 Network=host
 PublishPort=80:80
 PublishPort=443:443
@@ -17,6 +17,8 @@ Volume=caddy_config.volume:/config
 [Service]
 Restart=always
 ExecReload=/usr/bin/podman exec -w /etc/caddy caddy caddy reload --config /etc/caddy/Caddyfile --force
+Requires=podman-secret-exists@cloudflare_api_token.service
+After=podman-secret-exists@cloudflare_api_token.service
 
 [Install]
 WantedBy=default.targe
