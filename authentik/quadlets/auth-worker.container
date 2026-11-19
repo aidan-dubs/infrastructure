@@ -16,7 +16,7 @@ Volume=auth-templates.volume:/templates
 Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
 Volume=/etc/authentik/blueprints:/blueprints/custom:ro,z
-Volume=authentik-secrets.volume:/secrets
+Volume=auth-secrets.volume:/secrets
 Network=auth.network
 
 [Service]
