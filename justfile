@@ -69,6 +69,9 @@ env:
     envsubst '$DOMAIN' < ./common/systemd/system.conf.d/domain-env.conf > $TMPFILE
     sudo install -CD -m 644 -o root -g root $TMPFILE /etc/systemd/system.conf.d/domain-env.conf
 
+    sudo install -CD -m 644 -o root -g root ./common/containers/systemd/container.d/10-domain.conf /etc/containers/systemd/container.d/10-domain.conf
+    sudo install -CD -m 644 -o root -g root ./common/containers/systemd/container.d/10-domain.conf /etc/containers/systemd/users/container.d/10-domain.conf
+
 secrets:
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-gen /usr/local/bin/
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-gen@.service /etc/systemd/system/
