@@ -8,23 +8,25 @@ Environment=AUTHENTIK_POSTGRESQL__USER=authentik
 Environment=DOCKER_HOST=tcp://socket-proxy:2375
 Exec=worker
 Image=ghcr.io/goauthentik/server:2026.8.5
+UserNS=auto
 ShmSize=512mb
-Volume=auth-data:/data
-Volume=auth-certs:/certs
-Volume=auth-templates:/templates
+Volume=auth-data.volume:/data
+Volume=auth-certs.volume:/certs
+Volume=auth-templates.volume:/templates
 Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
-Volume=/etc/auth-blueprints:/blueprints/custom:ro,z
+Volume=/etc/authentik/blueprints:/blueprints/custom:ro,z
 Network=auth.network
-Pod=authentik.pod
 
 [Service]
 Restart=always
 
 [Install]
 WantedBy=default.target
+WantedBy=authentik.target
 
 [Unit]
+PartOf=authentik.target
 Requires=auth-sockproxy.service auth-db.service
 After=auth-sockproxy.service auth-db.service
 

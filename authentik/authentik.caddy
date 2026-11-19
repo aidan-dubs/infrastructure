@@ -1,4 +1,4 @@
 # Dashboard
 import public auth {
-    reverse_proxy authentik:80
+    reverse_proxy auth-server:9000
 }

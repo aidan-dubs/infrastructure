@@ -9,7 +9,11 @@ Volume=/run/podman/podman.sock:/var/run/docker.sock:ro
 ReadOnly=true
 Tmpfs=/run:rw,mode=1777
 Network=auth.network
-Pod=authentik.pod
+UserNS=auto
 
 [Install]
 WantedBy=default.target
+WantedBy=authentik.target
+
+[Unit]
+PartOf=authentik.target
