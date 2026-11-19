@@ -1,4 +1,5 @@
 [Container]
+Environment=NB_SETUP_PAT_ENABLED=true
 Exec=--config /etc/netbird/config.yaml
 Image=docker.io/netbirdio/netbird-server:latest
 PublishPort=3478:3478/udp
