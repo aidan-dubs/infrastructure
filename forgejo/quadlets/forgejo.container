@@ -1,12 +1,12 @@
 [Container]
 AutoUpdate=registry
 ContainerName=forgejo
-Image=codeberg.org/forgejo/forgejo:17
+Image=codeberg.org/forgejo/forgejo:17-rootless
 UserNS=auto
 Exec=forgejo web --config /etc/forgejo/app.ini --work-path /var/lib/forgejo
-PublishPort=2222:22
-Volume=/etc/forgejo:/etc/forgejo:ro,z
-Volume=/var/lib/forgejo:/var/lib/forgejo:z
+PublishPort=2222:2222
+Volume=/etc/forgejo:/etc/forgejo:z,U
+Volume=/var/lib/forgejo:/var/lib/forgejo:z,U
 Secret=forgejo-secret-key
 Secret=forgejo-internal-token
 Secret=forgejo-oauth2-jwt-secret
