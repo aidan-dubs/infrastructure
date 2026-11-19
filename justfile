@@ -5,7 +5,7 @@ help:
     @just --list
 
 
-all: env secrets forgjeo authentik caddy
+all: env secrets forgejo authentik caddy
 
 env:
     #!/usr/bin/env bash
