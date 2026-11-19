@@ -25,7 +25,7 @@ core-tmpfiles:
 post: tmpfiles selinux 
 
 restart: post
-    sudo systemctl restart authentik.target forgejo
+    sudo systemctl restart authentik.target forgejo netbird
 
 reload: post
     sudo systemctl reload caddy
@@ -127,10 +127,12 @@ forgejo: core
     sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
 
 netbird: core
+    sudo podman quadlet install --application netbird --reload-systemd --replace ./netbird/quadlets/
     sudo install -CD ./netbird/netbird.caddy /etc/caddy/caddy.d/
     sudo install -CD ./netbird/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+    sudo install -CD -m 755 -o root -g root ./netbird/config.yaml /etc/netbird/config.yaml
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
