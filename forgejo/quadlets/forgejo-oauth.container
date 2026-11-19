@@ -9,6 +9,8 @@ Secret=forgejo-secret-key
 Secret=forgejo-internal-token
 Secret=forgejo-oauth2-jwt-secret
 Secret=forgejo-lfs-jwt-secret
+Secret=forgejo-oauth-client-id
+Secret=forgejo-oauth-client-secret
 
 [Service]
 Type=oneshot
