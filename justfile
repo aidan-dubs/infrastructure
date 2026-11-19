@@ -8,7 +8,7 @@ help:
 
 
 [default]
-all: caddy restart reload
+all: caddy authentik restart reload
 
 tmpfiles:
     sudo systemd-tmpfiles --dry-run --create
