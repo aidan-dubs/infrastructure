@@ -24,7 +24,7 @@ tmpfiles:
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
 restart: tmpfiles
-    sudo systemctl restart authentik
+    sudo systemctl restart authentik.target
 
 reload: tmpfiles
     sudo systemctl reload caddy
