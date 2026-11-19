@@ -1,7 +1,3 @@
-[Unit]
-Requires=dashboard.service
-After=dashboard.service
-
 [Container]
 Exec=--config /etc/netbird/config.yaml
 Image=netbirdio/netbird-server:latest
@@ -20,6 +16,9 @@ Restart=always
 WantedBy=default.target
 
 [Unit]
+Requires=netbird-dashboard.service
+After=netbird-dashboard.service
+
 Requires=podman-secret-gen@netbird-encryption-key.service
 After=podman-secret-gen@netbird-encryption-key.service
 Requires=podman-secret-gen@netbird-auth-secret.service
