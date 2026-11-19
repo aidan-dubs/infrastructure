@@ -21,7 +21,7 @@ for sec in "${secrets[@]}"; do
 done
 
 response=$(
-    curl -fsS -X POST "${NB_URL}/api/setup" \
+    curl --fail-with-body -sS -X POST "${NB_URL}/api/setup" \
         -H "Content-Type: application/json" \
     -d '{
             "email": "nbadmin@"'"$DOMAIN"'",
@@ -42,7 +42,7 @@ idp_id=$(echo "$idps" | jq -r --arg name "$IDP_NAME" '.[] | select(.name == $nam
 
 if [ -n "$idp_id" ]; then
 
-    curl -fsS -X PUT "${NB_URL}/api/identity-providers/${idp_id}" \
+    curl --fail-with-body -sS -X PUT "${NB_URL}/api/identity-providers/${idp_id}" \
         -H 'Accept: application/json' \
         -H 'Content-Type: application/json' \
         -H "Authorization: Token $token" \
@@ -54,7 +54,7 @@ if [ -n "$idp_id" ]; then
             "client_secret": "'"$(cat /run/secrets/netbird-oauth-client-secret)"'"
         }'
 else
-    curl -fsS -X POST "${NB_URL}/api/identity-providers" \
+    curl --fail-with-body -sS -X POST "${NB_URL}/api/identity-providers" \
         -H 'Accept: application/json' \
         -H 'Content-Type: application/json' \
         -H "Authorization: Token $token" \
