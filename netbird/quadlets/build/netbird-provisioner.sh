@@ -24,7 +24,7 @@ response=$(
     curl --fail-with-body -sS -X POST "${NB_URL}/api/setup" \
         -H "Content-Type: application/json" \
     -d '{
-            "email": "nbadmin@"'"$DOMAIN"'",
+            "email": "nbadmin@'"$DOMAIN"'",
             "name": "Netbird Admin",
             "password": "'"$(cat /run/secrets/netbird-bootstrap-pass)"'",
             "create_pat": true,
@@ -35,10 +35,30 @@ response=$(
 
 token=$(echo "$response" | jq -r ".personal_access_token")
 
-
 idps=$( curl -fsS -X GET "${NB_URL}/api/identity-providers" -H 'Accept: application/json' -H "Authorization: Token $token" )
 
 idp_id=$(echo "$idps" | jq -r --arg name "$IDP_NAME" '.[] | select(.name == $name) | .id' | head -n1)
+
+
+accounts=$(curl -s -X GET "${NB_URL}/api/accounts" \
+        -H "Accept: application/json" \
+    -H "Authorization: Token $token")
+
+account_id=$(echo "$accounts" | jq -r '.[0].id')
+
+account_settings=$(echo "$accounts" | jq '{settings: (.[0].settings |
+    .extra.user_approval_required = false |
+    .jwt_groups_enabled = true |
+    .jwt_groups_claim_name = "groups" |
+    .local_auth_disabled = false
+)}')
+
+curl -X PUT "${NB_URL}/api/accounts/${account_id}" \
+    -H 'Accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -H "Authorization: Token $token" \
+    --data-raw "$account_settings"
+
 
 if [ -n "$idp_id" ]; then
 
