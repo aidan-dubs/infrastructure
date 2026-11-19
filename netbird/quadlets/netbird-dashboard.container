@@ -1,6 +1,6 @@
 [Container]
-Environment=NETBIRD_MGMT_API_ENDPOINT=https://net.${DOMAIN}:33073
-Environment=NETBIRD_MGMT_GRPC_API_ENDPOINT=https://net.${DOMAIN}:33073
+Environment=NETBIRD_MGMT_API_ENDPOINT=https://net.${DOMAIN}
+Environment=NETBIRD_MGMT_GRPC_API_ENDPOINT=https://net.${DOMAIN}
 Environment=AUTH_AUTHORITY=https://auth.${DOMAIN}/application/o/netbird/
 Environment=USE_AUTH0=false
 Environment=AUTH_SUPPORTED_SCOPES=openid profile email groups
