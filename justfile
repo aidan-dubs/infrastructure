@@ -1,14 +1,11 @@
 set dotenv-load
 
-user  := "containers"
-count := "65536"
-
 help:
     @just --list
 
 
 [default]
-all: caddy authentik selinux restart reload
+all: core forgejo restart reload
 
 selinux:
     #!/usr/bin/env bash
@@ -20,13 +17,17 @@ selinux:
     done
 
 tmpfiles:
-    sudo systemd-tmpfiles --dry-run --create
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
-restart: tmpfiles
+core-tmpfiles:
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+
+post: tmpfiles selinux 
+
+restart: post
     sudo systemctl restart authentik.target
 
-reload: tmpfiles
+reload: post
     sudo systemctl reload caddy
 
 containers-user:
@@ -84,6 +85,8 @@ common:
 
 setup: common env containers-user secrets
 
+core: caddy authentik core-tmpfiles
+
 caddy: setup
     sudo rm -rf /etc/containers/systemd/caddy/
 
@@ -96,7 +99,18 @@ caddy: setup
 
     sudo semanage import -f /etc/custom-selinux/caddy.mods
 
-forgejo: setup
+authentik: setup
+    sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
+
+    sudo rm -rf /etc/containers/systemd/authentik/
+
+    sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
+
+    sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
+
+
+forgejo: core
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -110,16 +124,6 @@ forgejo: setup
 
     sudo install -CD ./forgejo/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
-
-authentik: setup
-    sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
-
-    sudo rm -rf /etc/containers/systemd/authentik/
-
-    sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
-
-    sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
-    sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
