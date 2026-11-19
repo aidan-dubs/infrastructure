@@ -1,11 +1,38 @@
 set dotenv-load
 
+user  := "containers"
+count := "65536"
+
 [default]
 help:
     @just --list
 
 
 all: env secrets forgejo authentik caddy
+
+containers-user:
+    #!/usr/bin/env bash
+
+    RANGE="1000000:1048576"
+    POD_USER=containers
+
+    if ! id -u "${POD_USER}" &>/dev/null; then
+        useradd --create-home --shell /usr/sbin/nologin "${POD_USER}"
+        echo "created user '${POD_USER}'"
+    fi
+
+    if grep -qE "^${POD_USER}:" "/etc/subgid"; then
+        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subgid
+    else
+        echo "${POD_USER}:${RANGE}" >> /etc/subgid
+    fi
+
+    if grep -qE "^${POD_USER}:" "/etc/subuid"; then
+        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subuid
+    else
+        echo "${POD_USER}:${RANGE}" >> /etc/subuid
+    fi
+    
 
 env:
     #!/usr/bin/env bash
