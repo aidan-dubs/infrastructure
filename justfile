@@ -119,6 +119,7 @@ authentik: setup
     sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
 
     sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
