@@ -1,6 +1,6 @@
 [Container]
 Exec=--config /etc/netbird/config.yaml
-Image=netbirdio/netbird-server:latest
+Image=docker.io/netbirdio/netbird-server:latest
 PublishPort=3478:3478/udp
 Volume=netbird-data.volume:/var/lib/netbird
 Volume=/etc/netbird/config.yaml:/etc/netbird/config.yaml
