@@ -108,6 +108,8 @@ forgejo: setup
     sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
 
 authentik: setup
+    sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
+
     sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
 
     sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
