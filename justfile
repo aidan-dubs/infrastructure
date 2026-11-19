@@ -3,12 +3,22 @@ set dotenv-load
 user  := "containers"
 count := "65536"
 
-[default]
 help:
     @just --list
 
 
-all: env secrets forgejo authentik caddy
+[default]
+all: caddy restart reload
+
+tmpfiles:
+    sudo systemd-tmpfiles --dry-run --create
+    sudo systemd-tmpfiles --create
+
+restart: tmpfiles
+    sudo systemctl restart authentik
+
+reload: tmpfiles
+    sudo systemctl reload caddy
 
 containers-user:
     #!/usr/bin/env bash
@@ -32,7 +42,6 @@ containers-user:
     else
         echo "${POD_USER}:${RANGE}" >> /etc/subuid
     fi
-    
 
 env:
     #!/usr/bin/env bash
@@ -55,12 +64,14 @@ secrets:
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exist /usr/local/bin/
     sudo install -CD -m 755 -o root -g root ./secrets/podman-secret-exists@.service /etc/systemd/system/
 
-caddy: env
+setup: env containers-user secrets
+
+caddy: setup
     sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
     sudo install -CD ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD ./caddy/Caddyfile /etc/caddy/
 
-forgejo: env secrets
+forgejo: setup
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -74,7 +85,7 @@ forgejo: env secrets
     sudo install -CD ./forgejo/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
 
-authentik: env secrets
+authentik: setup
     sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
 
     sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/

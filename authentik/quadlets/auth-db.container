@@ -12,6 +12,7 @@ Image=docker.io/library/postgres:16-alpine
 Volume=auth-database:/var/lib/postgresql/data
 Secret=PG_PASS,type=env,target=POSTGRES_PASSWORD
 Network=auth.network
+Pod=authentik.pod
 
 [Service]
 Restart=always

@@ -17,6 +17,7 @@ Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
 Volume=/etc/auth-blueprints:/blueprints/custom:ro,z
 Network=auth.network
+Pod=authentik.pod
 
 [Service]
 Restart=always
