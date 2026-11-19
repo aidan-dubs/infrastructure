@@ -4,8 +4,7 @@ ContainerName=forgejo
 Image=codeberg.org/forgejo/forgejo:17
 UserNS=auto
 Exec=forgejo web --config /etc/forgejo/app.ini --work-path /var/lib/forgejo
-PublishPort=0.0.0.0:8993:3000
-PublishPort=0.0.0.0:2222:22
+PublishPort=2222:22
 Environment=USER_UID=%U
 Environment=USER_GID=%G
 Volume=/etc/forgejo:/etc/forgejo:ro,z
@@ -14,6 +13,7 @@ Secret=forgejo-secret-key
 Secret=forgejo-internal-token
 Secret=forgejo-oauth2-jwt-secret
 Secret=forgejo-lfs-jwt-secret
+Network=caddy.network
 
 [Service]
 Restart=always
