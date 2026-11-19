@@ -25,7 +25,7 @@ core-tmpfiles:
 post: tmpfiles selinux 
 
 restart: post
-    sudo systemctl restart authentik.target forgejo netbird
+    sudo systemctl restart authentik.target forgejo netbird-server netbird-dashboard
 
 reload: post
     sudo systemctl reload caddy
