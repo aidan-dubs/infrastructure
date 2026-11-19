@@ -1,49 +1,23 @@
-#!/bin/sh
-set -eu
-
-config=/etc/forgejo/app.ini
-source_name=authentik
-client_id=/run/secrets/forgejo-oauth-client-id
-secret_file=/run/secrets/forgejo-oauth-client-secret
-discovery_url=https://auth.${DOMAIN}/application/o/forgejo/.well-known/openid-configuration
-
-if [ ! -s "$secret_file" ]; then
-    echo "Missing Forgejo OAuth client secret at $secret_file" >&2
-    exit 1
-fi
-
-attempt=0
-until curl --fail --silent --output /dev/null "$discovery_url"; do
-    attempt=$((attempt + 1))
-    if [ "$attempt" -ge 60 ]; then
-        echo "Authentik OIDC discovery did not become available: $discovery_url" >&2
-        curl --fail --show-error --silent --output /dev/null "$discovery_url"
-        exit 1
-    fi
-    sleep 5
-done
-
-source_id=$(
-    forgejo admin auth list --config "$config" |
-    awk -v name="$source_name" 'NR > 1 && $2 == name { print $1; exit }'
-)
-set -- \
-    --config "$config" \
-    --name "$source_name" \
-    --provider openidConnect \
-    --key "$(cat "$client_id")" \
-    --auto-discover-url "$discovery_url"
-
-if [ -n "$source_id" ]; then
-    set -- forgejo admin auth update-oauth --id "$source_id" "$@"
+if forgejo admin auth list --config "/etc/forgejo/app.ini" | grep -qE "authentik" &>/dev/null; then
+    forgejo admin auth add-oauth \
+        --config "/etc/forgejo/app.ini" \
+        --name "authentik" \
+        --provider openidConnect \
+        --key "$(cat "/run/secrets/forgejo-oauth-client-id")" \
+        --auto-discover-url "https://auth.${DOMAIN}/application/o/forgejo/.well-known/openid-configuration" \
+        --secret "$(cat "/run/secrets/forgejo-oauth-client-secret")" \
+        --scopes openid \
+        --scopes profile \
+        --scopes email
 else
-    set -- forgejo admin auth add-oauth "$@"
+    forgejo admin auth update-oauth --id "$source_id" \
+        --config "/etc/forgejo/app.ini" \
+        --name "authentik" \
+        --provider openidConnect \
+        --key "$(cat "/run/secrets/forgejo-oauth-client-id")" \
+        --auto-discover-url "https://auth.${DOMAIN}/application/o/forgejo/.well-known/openid-configuration" \
+        --secret "$(cat "/run/secrets/forgejo-oauth-client-secret")" \
+        --scopes openid \
+        --scopes profile \
+        --scopes email
 fi
-
-# Forgejo's CLI only accepts the client secret as a flag value.
-set -- "$@" \
-    --secret "$(cat "$secret_file")" \
-    --scopes openid \
-    --scopes profile \
-    --scopes email
-exec "$@"
