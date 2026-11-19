@@ -97,8 +97,6 @@ caddy: setup
     sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
     sudo install -CD -m 755 -o root -g root ./caddy/selinux/caddy.mods /etc/custom-selinux/
 
-    sudo semanage import -f /etc/custom-selinux/caddy.mods
-
 authentik: setup
     sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
 
@@ -124,6 +122,7 @@ forgejo: core
 
     sudo install -CD ./forgejo/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
+    sudo install -CD -m 755 -o root -g root ./forgejo/selinux/forgejo.mods /etc/custom-selinux/
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
