@@ -68,8 +68,8 @@ setup: env containers-user secrets
 
 caddy: setup
     sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
-    sudo install -CD ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
-    sudo install -CD ./caddy/Caddyfile /etc/caddy/
+    sudo install -CD -m 755 -o root -g root ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
 
 forgejo: setup
     #!/usr/bin/env bash
