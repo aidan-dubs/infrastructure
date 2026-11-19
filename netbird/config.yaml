@@ -13,7 +13,7 @@ server:
   dataDir: "/var/lib/netbird"
 
   auth:
-    localAuthDisabled: true
+    localAuthDisabled: false
     issuer: "https://net.${DOMAIN}/oauth2"
     signKeyRefreshEnabled: true
     dashboardRedirectURIs:
