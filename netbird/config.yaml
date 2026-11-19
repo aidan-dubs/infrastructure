@@ -14,11 +14,17 @@ server:
 
   auth:
     localAuthDisabled: true
+    issuer: "https://net.${DOMAIN}/oauth2"
+    signKeyRefreshEnabled: true
+    dashboardRedirectURIs:
+      - "https://net.${DOMAIN}/nb-auth"
+      - "https://net.${DOMAIN}/nb-silent-auth"
+    cliRedirectURIs:
+      - "http://localhost:53000/"
 
   reverseProxy:
     trustedHTTPProxies:
       - "10.12.0.5/32"
-
 
   store:
     engine: "sqlite"
