@@ -85,7 +85,10 @@ common:
 setup: common env containers-user secrets
 
 caddy: setup
+    sudo rm -rf /etc/containers/systemd/caddy/
+
     sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
+
 
     sudo install -CD -m 755 -o root -g root ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
@@ -98,6 +101,7 @@ forgejo: setup
     set -euo pipefail
 
     sudo podman quadlet install --application forgjeo --reload-systemd --replace ./forgejo/quadlets/
+
     TMPFILE=$(mktemp --suffix .conf) || exit 1
     trap 'rm -f "$TMPFILE"' EXIT
 
@@ -109,6 +113,8 @@ forgejo: setup
 
 authentik: setup
     sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
+
+    sudo rm -rf /etc/containers/systemd/authentik/
 
     sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
 
