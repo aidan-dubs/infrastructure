@@ -1,2 +1,3 @@
 [Pod]
 PodName=authentik
+ServiceName=authentik
