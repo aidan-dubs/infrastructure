@@ -5,8 +5,6 @@ Image=codeberg.org/forgejo/forgejo:17
 UserNS=auto
 Exec=forgejo web --config /etc/forgejo/app.ini --work-path /var/lib/forgejo
 PublishPort=2222:22
-Environment=USER_UID=%U
-Environment=USER_GID=%G
 Volume=/etc/forgejo:/etc/forgejo:ro,z
 Volume=/var/lib/forgejo:/var/lib/forgejo:z
 Secret=forgejo-secret-key
