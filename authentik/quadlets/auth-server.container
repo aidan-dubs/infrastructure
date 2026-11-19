@@ -15,7 +15,7 @@ Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
 Secret=AUTHENTIK_BOOTSTRAP_PASSWORD,type=env,target=AUTHENTIK_BOOTSTRAP_PASSWORD
 Network=auth.network
 Network=caddy.network
-Volume=/etc/authentik/blueprints:/blueprints/custom:ro,z
+Volume=/etc/authentik/blueprints:/blueprints/custom:Z
 UserNS=auto
 
 [Service]
