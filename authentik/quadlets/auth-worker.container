@@ -9,7 +9,6 @@ Environment=DOCKER_HOST=tcp://socket-proxy:2375
 Exec=worker
 Image=ghcr.io/goauthentik/server:2026.8.5
 ShmSize=512mb
-User=root
 Volume=auth-data:/data
 Volume=auth-certs:/certs
 Volume=auth-templates:/templates

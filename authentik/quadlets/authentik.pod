@@ -1,3 +1,4 @@
 [Pod]
 PodName=authentik
 ServiceName=authentik
+UserNS=auto

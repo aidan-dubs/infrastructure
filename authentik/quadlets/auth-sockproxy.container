@@ -1,8 +1,6 @@
 [Container]
 ContainerName=socket-proxy
 Image=lscr.io/linuxserver/socket-proxy:latest
-User=65534:65534
-UserNS=keep-id:uid=65534,gid=65534
 Environment=CONTAINERS=1
 Environment=IMAGES=1
 Environment=LIBPOD_CONTAINERS=1
