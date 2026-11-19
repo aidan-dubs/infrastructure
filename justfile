@@ -10,6 +10,7 @@ help:
 [default]
 all: caddy authentik restart reload
 
+
 tmpfiles:
     sudo systemd-tmpfiles --dry-run --create
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
@@ -68,8 +69,12 @@ setup: env containers-user secrets
 
 caddy: setup
     sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
+
     sudo install -CD -m 755 -o root -g root ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
+    sudo install -CD -m 755 -o root -g root ./caddy/selinux/caddy.mods /etc/custom-selinux/
+
+    sudo semanage import -f /etc/custom-selinux/caddy.mods
 
 forgejo: setup
     #!/usr/bin/env bash
