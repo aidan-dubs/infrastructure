@@ -25,7 +25,7 @@ core-tmpfiles:
 post: tmpfiles selinux 
 
 restart: post
-    sudo systemctl restart authentik.target
+    sudo systemctl restart authentik.target forgejo
 
 reload: post
     sudo systemctl reload caddy
