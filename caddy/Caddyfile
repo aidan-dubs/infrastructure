@@ -16,6 +16,8 @@
 	}
 
 }
+
+(netbird_only) {
 	@denied not remote_ip 100.64.0.0/10
 	respond @denied "Forbidden" 403
 }
