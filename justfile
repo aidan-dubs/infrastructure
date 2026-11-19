@@ -124,7 +124,7 @@ forgejo: core
     sudo install -CD ./forgejo/forge.caddy /etc/caddy/caddy.d/
     sudo install -CD -m 755 -o root -g root ./forgejo/selinux/forgejo.mods /etc/custom-selinux/
     sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo.yaml /etc/authentik/blueprints/
-    sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.d/
+    sudo install -CD -m 755 -o root -g root ./forgejo/authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
