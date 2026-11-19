@@ -17,6 +17,9 @@ Network=caddy.network
 Restart=always
 
 [Unit]
+Requires=forgejo-oauth.service
+After=forgejo-oauth.service
+
 Requires=podman-secret-gen@forgejo-secret-key.service
 Requires=podman-secret-gen@forgejo-oauth-client-id.service
 Requires=podman-secret-gen@forgejo-oauth-client-secret.service
