@@ -11,6 +11,8 @@ Secret=netbird-oauth-client-secret,type=env,target=AUTH_CLIENT_SECRET
 Secret=netbird-oauth-client-id,type=env,target=AUTH_CLIENT_ID
 Secret=netbird-oauth-client-id,type=env,target=AUTH_AUDIENCE
 ContainerName=netbird-dashboard
+Network=caddy.network
+Network=netbird.network
 
 [Service]
 Restart=always

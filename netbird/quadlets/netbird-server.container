@@ -8,6 +8,8 @@ Environment=NB_EXPOSED_ADDRESS=https://net.${DOMAIN}:443
 Secret=netbird-auth-secret,type=env,target=NB_AUTH_SECRET
 Secret=netbird-encryption-key,type=env,target=NB_STORE_ENCRYPTION_KEY
 ContainerName=netbird-server
+Network=caddy.network
+Network=netbird.network
 
 [Service]
 Restart=always
