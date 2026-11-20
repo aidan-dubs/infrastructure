@@ -26,8 +26,11 @@ entries:
         - matching_mode: strict
           url: !Format [
             "https://net.%s/oauth2/callback",
-            !Env DOMAIN ]
+            !Env DOMAIN]
+      logout_method: backchannel
+      logout_uri: !Format ["https://net.%s/oauth2/logout/callback", !Env DOMAIN]
       signing_key: !Find [authentik_crypto.certificatekeypair, [name, authentik Self-signed Certificate]]
+      user_username: user_id
   - model: authentik_core.application
     identifiers:
       slug: netbird
