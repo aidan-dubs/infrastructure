@@ -10,9 +10,9 @@ podman quadlets. I have a single Dell Poweredge r730 running a Fedora IoT editio
 
 - [x] Caddy
 - [x] Authentik
-- [ ] NetBird
+- [x] NetBird
 - [x] Forgejo
-  - [X] Forgejo Runner
+  - [ ] Forgejo Runner
 - [ ] Homarr
 - [ ] Smallstep
 - [ ] Syncthing
