@@ -50,7 +50,6 @@ account_settings=$(echo "$accounts" | jq '{settings: (.[0].settings |
     .extra.user_approval_required = false |
     .jwt_groups_enabled = true |
     .jwt_groups_claim_name = "groups" |
-    .local_auth_disabled = false
 )}')
 
 curl -X PUT "${NB_URL}/api/accounts/${account_id}" \
@@ -60,29 +59,29 @@ curl -X PUT "${NB_URL}/api/accounts/${account_id}" \
     --data-raw "$account_settings"
 
 
-if [ -n "$idp_id" ]; then
-
-    curl --fail-with-body -sS -X PUT "${NB_URL}/api/identity-providers/${idp_id}" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -H "Authorization: Token $token" \
-    --data-raw '{
-            "type": "oidc",
-            "name": "'"$IDP_NAME"'",
-            "issuer": "'"$ISSUER"'",
-            "client_id": "'"$(cat /run/secrets/netbird-oauth-client-id)"'",
-            "client_secret": "'"$(cat /run/secrets/netbird-oauth-client-secret)"'"
-        }'
-else
-    curl --fail-with-body -sS -X POST "${NB_URL}/api/identity-providers" \
-        -H 'Accept: application/json' \
-        -H 'Content-Type: application/json' \
-        -H "Authorization: Token $token" \
-    --data-raw '{
-            "type": "oidc",
-            "name": "'"$IDP_NAME"'",
-            "issuer": "'"$ISSUER"'",
-            "client_id": "'"$(cat /run/secrets/netbird-oauth-client-id)"'",
-            "client_secret": "'"$(cat /run/secrets/netbird-oauth-client-secret)"'"
-        }'
-fi
+# if [ -n "$idp_id" ]; then
+#
+#     curl --fail-with-body -sS -X PUT "${NB_URL}/api/identity-providers/${idp_id}" \
+    #         -H 'Accept: application/json' \
+    #         -H 'Content-Type: application/json' \
+    #         -H "Authorization: Token $token" \
+    #     --data-raw '{
+#             "type": "oidc",
+#             "name": "'"$IDP_NAME"'",
+#             "issuer": "'"$ISSUER"'",
+#             "client_id": "'"$(cat /run/secrets/netbird-oauth-client-id)"'",
+#             "client_secret": "'"$(cat /run/secrets/netbird-oauth-client-secret)"'"
+#         }'
+# else
+#     curl --fail-with-body -sS -X POST "${NB_URL}/api/identity-providers" \
+    #         -H 'Accept: application/json' \
+    #         -H 'Content-Type: application/json' \
+    #         -H "Authorization: Token $token" \
+    #     --data-raw '{
+#             "type": "oidc",
+#             "name": "'"$IDP_NAME"'",
+#             "issuer": "'"$ISSUER"'",
+#             "client_id": "'"$(cat /run/secrets/netbird-oauth-client-id)"'",
+#             "client_secret": "'"$(cat /run/secrets/netbird-oauth-client-secret)"'"
+#         }'
+# fi
