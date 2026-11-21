@@ -156,6 +156,7 @@ netbird-reset:
     sudo systemctl restart netbird-provisioner-build netbird-provisioner
 
 print-secrets:
+    #!/usr/bin/env bash
     echo "Netbird bootstrap:"
     sudo podman secret inspect --showsecret --format "{{.SecretData}}" netbird-bootstrap-pass
     echo "Authentik bootstrap:"
