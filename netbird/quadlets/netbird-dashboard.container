@@ -6,7 +6,7 @@ Environment=AUTH_CLIENT_ID=netbird-dashboard
 Environment=AUTH_CLIENT_SECRET=
 Environment=AUTH_AUDIENCE=netbird-dashboard
 Environment=USE_AUTH0=false
-Environment=AUTH_SUPPORTED_SCOPES=openid profile email groups
+Environment=AUTH_SUPPORTED_SCOPES=openid profile email offline_access
 Environment=AUTH_REDIRECT_URI=/nb-auth
 Environment=AUTH_SILENT_REDIRECT_URI=/nb-silent-auth
 Image=docker.io/netbirdio/dashboard:latest
