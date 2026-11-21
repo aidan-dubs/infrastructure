@@ -11,8 +11,6 @@ entries:
       name: "users"
     attrs:
       name: "users"
-      parents:
-        - "admins"
   - model: authentik_core.group
     identifiers:
       name: "admins"
