@@ -158,9 +158,9 @@ netbird-reset:
 print-secrets:
     #!/usr/bin/env bash
     echo "Netbird bootstrap:"
-    sudo podman secret inspect --showsecret --format "{{.SecretData}}" netbird-bootstrap-pass
+    sudo podman secret inspect --showsecret --format "{{{{.SecretData}}}}" netbird-bootstrap-pass
     echo "Authentik bootstrap:"
-    sudo podman secret inspect --showsecret --format "{{.SecretData}}" AUTHENTIK_BOOTSTRAP_PASSWORD
+    sudo podman secret inspect --showsecret --format "{{{{.SecretData}}}}" AUTHENTIK_BOOTSTRAP_PASSWORD
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
