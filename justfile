@@ -5,7 +5,7 @@ help:
 
 
 [default]
-all: core forgejo netbird openproject restart reload
+all: core forgejo netbird openproject
 
 selinux:
     #!/usr/bin/env bash
@@ -110,6 +110,7 @@ authentik: setup
 
     sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
     sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/main-blueprint.yaml /etc/authentik/blueprints/
 
 
 forgejo: core
