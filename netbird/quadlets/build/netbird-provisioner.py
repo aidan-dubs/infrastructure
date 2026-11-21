@@ -131,7 +131,7 @@ users_j = users_r.json()
 
 
 for user in users_j:
-    if user["role"] != "admin" and user["role"]:
+    if user["role"] != "admin" and user["role"] != "owner":
         requests.put(
             f"{nb_api}/users/{user['id']}",
             headers=headers,
