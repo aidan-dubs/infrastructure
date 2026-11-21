@@ -1,0 +1,4 @@
+# Dashboard
+import public project {
+    reverse_proxy openproject:80
+}
