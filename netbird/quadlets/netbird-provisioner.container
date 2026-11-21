@@ -3,6 +3,7 @@ Image=netbird-provisioner.build
 Secret=netbird-oauth-client-secret
 Secret=netbird-oauth-client-id
 Secret=netbird-bootstrap-pass
+Volume=netbird-pat:/pat
 ContainerName=netbird-provision
 Network=caddy.network
 Network=netbird.network

@@ -147,6 +147,20 @@ netbird: core
     sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./netbird/authentik/netbird-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
 
+
+netbird-reset:
+    sudo systemctl stop netbird-server netbird-dashboard netbird-provisioner
+    sudo podman volume rm netbird-data
+    sudo systemctl start netbird-server netbird-dashboard 
+    sleep 20
+    sudo systemctl restart netbird-provisioner-build netbird-provisioner
+
+print-secrets:
+    echo "Netbird bootstrap:"
+    sudo podman secret inspect --showsecret --format "{{.SecretData}}" netbird-bootstrap-pass
+    echo "Authentik bootstrap:"
+    sudo podman secret inspect --showsecret --format "{{.SecretData}}" AUTHENTIK_BOOTSTRAP_PASSWORD
+
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
 #

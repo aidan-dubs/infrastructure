@@ -1,8 +1,9 @@
-FROM alpine:latest
+FROM docker.io/python:3-slim
 
-RUN apk add --no-cache bash curl jq ca-certificates
+WORKDIR /usr/src/app
 
-COPY netbird-provisioner.sh /usr/local/bin/netbird-provisioner.sh
-RUN chmod +x /usr/local/bin/netbird-provisioner.sh
+COPY ./netbird-provisioner.py .
 
-ENTRYPOINT ["/usr/local/bin/netbird-provisioner.sh"]
+RUN pip install --no-cache-dir requests
+
+CMD [ "python", "./netbird-provisioner.py" ]
