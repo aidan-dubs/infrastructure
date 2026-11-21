@@ -30,8 +30,10 @@ if not token_file.is_file() or not token_file.read_text().strip():
         "name": "Netbird Admin",
         "password": netbird_bootstrap_pass,
         "create_pat": True,
-        "pat_expire_in": 90
+        "pat_expire_in": 7
     })
+
+    print(setup_resp.request)
 
     print(setup_resp.status_code, setup_resp.text, flush=True)
     setup_resp.raise_for_status()
