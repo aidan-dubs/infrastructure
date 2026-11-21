@@ -5,7 +5,7 @@ help:
 
 
 [default]
-all: core forgejo netbird restart reload
+all: core forgejo netbird openproject restart reload
 
 selinux:
     #!/usr/bin/env bash
@@ -29,7 +29,7 @@ daemon-reload:
 post: tmpfiles selinux daemon-reload
 
 restart: post
-    sudo systemctl restart authentik.target forgejo
+    sudo systemctl restart authentik.target forgejo openproject
 
 reload: post
     sudo systemctl reload caddy
@@ -153,12 +153,21 @@ netbird-reset: netbird
     sudo podman volume rm netbird-data netbird-pat
     sudo systemctl start netbird-server netbird-dashboard netbird-provisioner-build netbird-provisioner
 
+
+openproject:
+    sudo podman quadlet install --application openproject --reload-systemd --replace ./openproject/quadlets/
+
+    sudo install -CD ./openproject/openproject.caddy /etc/caddy/caddy.d/
+
+
 print-secrets:
     #!/usr/bin/env bash
     echo "Netbird bootstrap:"
     sudo podman secret inspect --showsecret --format "{{{{.SecretData}}}}" netbird-bootstrap-pass
     echo "Authentik bootstrap:"
     sudo podman secret inspect --showsecret --format "{{{{.SecretData}}}}" AUTHENTIK_BOOTSTRAP_PASSWORD
+    echo "Openproject bootstrap:"
+    sudo podman secret inspect --showsecret --format "{{{{.SecretData}}}}" openproject-bootstrap-pass
 
 # forgejo-runner:
 #     sudo podman quadlet install --application forgejo-runner --reload-systemd --replace ./forgejo-runner/quadlets/
