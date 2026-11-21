@@ -21,5 +21,5 @@ forgejo admin auth $SUBCMD \
     --scopes openid \
     --scopes profile \
     --scopes email \
-    --scopes groups \
+    --group-claim-name groups \
     --admin-group "admins"
