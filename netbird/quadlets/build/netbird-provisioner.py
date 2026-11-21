@@ -109,3 +109,16 @@ else:
     print("Creating identity-provider")
     requests.post(f"{nb_api}/identity-providers",
                   headers=headers, json=authentik_provider)
+
+
+users_r = requests.get(f"{nb_api}/users", headers=headers)
+
+users_j = users_r.json()
+
+
+for user in users_j:
+    if user["role"] != "admin":
+        requests.put(
+            f"{nb_api}/users/{user['id']}",
+            headers=headers,
+            json={"role": "admin"}).raise_for_status()

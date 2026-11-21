@@ -1,8 +1,7 @@
 [Container]
 ContainerName=forgejo-oauth
-Image=codeberg.org/forgejo/forgejo:17-rootless
+Image=forgejo-oauth.build
 UserNS=auto
-Exec=sh -c 'i=$(forgejo admin auth list --config /etc/forgejo/app.ini | grep authentik | cut -f1); c=add-oauth; [ -n "$i" ] && c="update-oauth --id $i"; forgejo admin auth $c --config /etc/forgejo/app.ini --name authentik --provider openidConnect --key "$(cat /run/secrets/forgejo-oauth-client-id)" --secret "$(cat /run/secrets/forgejo-oauth-client-secret)" --auto-discover-url "https://auth.$DOMAIN/application/o/forgejo/.well-known/openid-configuration" --scopes openid --scopes profile --scopes email'
 Volume=/etc/forgejo:/etc/forgejo:z,U
 Volume=/var/lib/forgejo:/var/lib/forgejo:z,U
 Secret=forgejo-secret-key
@@ -17,6 +16,8 @@ Type=oneshot
 RemainAfterExit=yes
 
 [Unit]
+PartOf=forgejo.service
+
 Requires=podman-secret-gen@forgejo-secret-key.service
 Requires=podman-secret-gen@forgejo-oauth-client-id.service
 Requires=podman-secret-gen@forgejo-oauth-client-secret.service

@@ -16,6 +16,13 @@ RemainAfterExit=yes
 WantedBy=default.target
 
 [Unit]
+
+Requires=netbird-dashboard.service
+After=netbird-dashboard.service
+
+Requires=netbird-server.service
+After=netbird-server.service
+
 Requires=podman-secret-gen@netbird-oauth-client-id.service
 After=podman-secret-gen@netbird-oauth-client-id.service
 Requires=podman-secret-gen@netbird-oauth-client-secret.service

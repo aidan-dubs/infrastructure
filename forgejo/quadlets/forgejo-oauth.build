@@ -1,0 +1,4 @@
+[Build]
+ImageTag=localhost/forgejo-oauth
+File=forgejo-oauth.Containerfile
+SetWorkingDirectory=./build/
