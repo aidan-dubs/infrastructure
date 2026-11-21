@@ -12,6 +12,7 @@ Volume=openproject-pgdata:/var/openproject/pgdata
 Volume=openproject-assets:/var/openproject/assets
 Secret=openproject-key-base,type=env,target=SECRET_KEY_BASE
 Secret=openproject-boostrap-pass,type=env,target=OPENPROJECT_SEED__ADMIN__USER__PASSWORD
+Network=caddy.network
 
 [Service]
 Restart=always
