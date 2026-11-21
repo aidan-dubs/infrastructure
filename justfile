@@ -29,7 +29,7 @@ daemon-reload:
 post: tmpfiles selinux daemon-reload
 
 restart: post
-    sudo systemctl restart authentik.target forgejo netbird-server netbird-dashboard
+    sudo systemctl restart authentik.target forgejo
 
 reload: post
     sudo systemctl reload caddy
@@ -151,9 +151,7 @@ netbird: core
 netbird-reset: netbird
     sudo systemctl stop netbird-server netbird-dashboard netbird-provisioner
     sudo podman volume rm netbird-data netbird-pat
-    sudo systemctl start netbird-server netbird-dashboard 
-    sleep 20
-    sudo systemctl restart netbird-provisioner-build netbird-provisioner
+    sudo systemctl start netbird-server netbird-dashboard netbird-provisioner-build netbird-provisioner
 
 print-secrets:
     #!/usr/bin/env bash

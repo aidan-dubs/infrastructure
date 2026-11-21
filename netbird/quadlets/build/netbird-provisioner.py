@@ -2,6 +2,7 @@
 import os
 import requests
 from pathlib import Path
+import time
 
 
 domain = os.getenv('DOMAIN')
@@ -23,6 +24,17 @@ netbird_bootstrap_pass = Path(
 
 token_file = Path("/pat/token")
 token = ""
+
+start = time.monotonic()
+
+while time.monotonic() - start < 30:
+    try:
+        response = requests.get(nb_api)
+        if response.status_code in [404, 401] or response.status_code 400:
+            break
+        else:
+            echo("waiting for api")
+            time.sleep(5)
 
 if not token_file.is_file() or not token_file.read_text().strip():
     setup_resp = requests.post(f"{nb_api}/setup", json={
