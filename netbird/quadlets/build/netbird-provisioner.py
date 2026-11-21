@@ -77,15 +77,19 @@ account_id = accounts_j[0]["id"]
 print("Getting account settings")
 account_settings = accounts_j[0]["settings"]
 
+if not account_settings.get("extra"):
+    account_settings["extra"] = {}
 
 account_settings["extra"]["user_approval_required"] = False
 account_settings["jwt_groups_enabled"] = True
 account_settings["jwt_groups_claim_name"] = "groups"
 
 print("Setting account settings")
-requests.put(f"{nb_api}/accounts/{account_id}",
-             headers=headers, json=account_settings)
+settings_r = requests.put(f"{nb_api}/accounts/{account_id}",
+                          headers=headers, json={"settings": account_settings})
 
+print(settings_r.status_code, settings_r.text)
+settings_r.raise_for_status()
 
 authentik_provider = {
     "type": "oidc",
