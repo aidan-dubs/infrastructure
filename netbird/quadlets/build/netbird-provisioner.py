@@ -29,7 +29,7 @@ if not token_file.is_file() or not token_file.read_text().strip():
         "email": f"nbadmin@{domain}",
         "name": "Netbird Admin",
         "password": netbird_bootstrap_pass,
-        "create": True,
+        "create_pat": True,
         "pat_expire_in": 90
     })
 
@@ -41,6 +41,7 @@ if not token_file.is_file() or not token_file.read_text().strip():
     if not token:
         raise RuntimeError(f"No PAT in setup response: {setup_json}")
 
+    token_file.write_text(token)
 
 else:
     token = token_file.read_text().strip()
