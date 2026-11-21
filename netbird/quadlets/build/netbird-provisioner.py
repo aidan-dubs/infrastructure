@@ -83,6 +83,7 @@ if not account_settings.get("extra"):
 account_settings["extra"]["user_approval_required"] = False
 account_settings["jwt_groups_enabled"] = True
 account_settings["jwt_groups_claim_name"] = "groups"
+account_settings["dns_domain"] = f"n.{domain}"
 
 print("Setting account settings")
 settings_r = requests.put(f"{nb_api}/accounts/{account_id}",
