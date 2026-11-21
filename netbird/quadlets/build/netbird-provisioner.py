@@ -33,9 +33,15 @@ if not token_file.is_file() or not token_file.read_text().strip():
         "pat_expire_in": 90
     })
 
+    print(setup_resp.status_code, setup_resp.text, flush=True)
+    setup_resp.raise_for_status()
+
     setup_json = setup_resp.json()
-    token = setup_json["personal_access_token"]
-    token_file.write_text(token)
+    token = setup_json.get("personal_access_token")
+    if not token:
+        raise RuntimeError(f"No PAT in setup response: {setup_json}")
+
+
 else:
     token = token_file.read_text().strip()
 
