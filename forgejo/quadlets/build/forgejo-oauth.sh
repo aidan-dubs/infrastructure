@@ -3,8 +3,6 @@ set -eu
 
 forgejo migrate --config /etc/forgejo/app.ini --work-path /var/lib/forgejo
 
-forgejo--config /etc/forgejo/app.ini --work-path /var/lib/forgejo admin user create --username admin --password <PASSWORD> --email admin@example.com --admin
-
 ID=$(forgejo admin auth list --config /etc/forgejo/app.ini | grep authentik | cut -f1)
 SUBCMD=add-oauth
 
