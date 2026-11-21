@@ -7,7 +7,7 @@ Environment=OPENPROJECT_APP__TITLE=Project
 Environment=OPENPROJECT_SEED__ADMIN__USER__MAIL="opadmin@${DOMAIN}"
 Environment=OPENPROJECT_SEED__ADMIN__USER__NAME=opadmin
 Environment=OPENPROJECT_SEED__ADMIN__USER__PASSWORD__RESET=false
-Image=openproject/openproject:17
+Image=docker.io/openproject/openproject:17
 Volume=openproject-pgdata:/var/openproject/pgdata
 Volume=openproject-assets:/var/openproject/assets
 Secret=openproject-key-base,type=env,target=SECRET_KEY_BASE
