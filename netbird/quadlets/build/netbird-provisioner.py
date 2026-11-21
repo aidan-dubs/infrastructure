@@ -135,4 +135,9 @@ for user in users_j:
         requests.put(
             f"{nb_api}/users/{user['id']}",
             headers=headers,
-            json={"role": "admin"}).raise_for_status()
+            json={
+                "role": "admin",
+                "auto_groups": [],
+                "is_blocked": False
+            }
+        ).raise_for_status()
