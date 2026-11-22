@@ -4,9 +4,9 @@ AutoUpdate=registry
 ContainerName=caddy
 UserNS=auto
 Image=caddy.build
-Network=caddy.network:ip=10.12.0.5
-PublishPort=80:80
-PublishPort=443:443
+Network=caddy.network:ip=10.12.0.2
+PublishPort=0.0.0.0:80:80
+PublishPort=0.0.0.0:443:443
 Pull=missing
 Secret=cloudflare_api_token
 Volume=/etc/caddy:/etc/caddy:Z
@@ -20,4 +20,4 @@ Requires=podman-secret-exists@cloudflare_api_token.service
 After=podman-secret-exists@cloudflare_api_token.service
 
 [Install]
-WantedBy=default.targe
+WantedBy=default.target
