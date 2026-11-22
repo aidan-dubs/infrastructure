@@ -29,7 +29,7 @@
 
 # TODO: also include LAN access
 (private) {
-	{args[0]}.p.{$DOMAIN}{args[1]} {
+	{args[0]}.p.{$DOMAIN} {
 		import netbird_only
 		{block}
 	}
