@@ -1,0 +1,4 @@
+[Build]
+ImageTag=localhost/terminal-container
+File=terminal-container.Containerfile
+SetWorkingDirectory=./build/

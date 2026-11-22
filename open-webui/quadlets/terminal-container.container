@@ -1,9 +1,8 @@
 [Container]
 ContainerName=terminal-container
-Environment=OPEN_TERMINAL_API_KEY=apikey "OPEN_TERMINAL_EXECUTE_DESCRIPTION=user on a Feora 44 server"
+Environment=OPEN_TERMINAL_API_KEY=apikey "OPEN_TERMINAL_EXECUTE_DESCRIPTION=user on a Feora server"
 HostName=fedora-container
-Image=localhost/terminal:latest
-PublishPort=8001:8000
+Image=terminal-container.build
 
 [Unit]
 After=open-webui.container
