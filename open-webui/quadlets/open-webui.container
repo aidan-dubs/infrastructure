@@ -1,7 +1,6 @@
 [Container]
 AutoUpdate=registry
 ContainerName=open-webui
-EnvironmentFile=%E/open-webui/.env
 Image=ghcr.io/open-webui/open-webui:main
 Network=open-webui-stack.network
 Network=caddy.network
