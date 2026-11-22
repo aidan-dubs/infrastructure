@@ -167,6 +167,8 @@ open-webui:
     sudo install -CD -m 755 -o root -g root ./common/tmpfiles.d/* /etc/tmpfiles.d/
     sudo install -CD ./open-webui/olla-config.yaml /etc/olla/config.yaml
     sudo install -CD -m 755 -o root -g root ./open-webui/selinux/open-webui.mods /etc/custom-selinux/
+    sudo install -CD -m 755 -o root -g root ./open-webui/authentik/open-webui.yaml /etc/authentik/blueprints/
+    sudo install -CD -m 755 -o root -g root ./open-webui/authentik/open-webui-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
 
 print-secrets:
     #!/usr/bin/env bash
