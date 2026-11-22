@@ -5,7 +5,7 @@ help:
 
 
 [default]
-all: core forgejo netbird openproject
+all: core forgejo netbird openproject open-webui post
 
 selinux:
     #!/usr/bin/env bash
@@ -160,6 +160,13 @@ openproject:
 
     sudo install -CD ./openproject/openproject.caddy /etc/caddy/caddy.d/
 
+open-webui:
+    sudo podman quadlet install --application open-webui-stack --reload-systemd --replace ./open-webui/quadlets/
+
+    sudo install -CD ./open-webui/open-webui.caddy /etc/caddy/caddy.d/
+    sudo install -CD -m 755 -o root -g root ./common/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD ./open-webui/olla-config.yaml /etc/olla/config.yaml
+    sudo install -CD -m 755 -o root -g root ./open-webui/selinux/open-webui.mods /etc/custom-selinux/
 
 print-secrets:
     #!/usr/bin/env bash

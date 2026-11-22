@@ -1,0 +1,24 @@
+[Container]
+AddDevice=nvidia.com/gpu=all
+AutoUpdate=registry
+ContainerName=olla
+Exec=--config /app/config.yaml
+HealthCmd=["wget","--quiet","--tries=1","--spider","http://localhost:40114/internal/health"]
+HealthInterval=30s
+HealthRetries=3
+HealthStartPeriod=10s
+HealthTimeout=5s
+Image=ghcr.io/thushan/olla:latest
+Network=open-webui-stack.network
+Pull=never
+Volume=%E/olla/olla-config.yaml:/app/config.yaml:ro,z
+
+[Unit]
+After=caddy.container
+After=ollama.container
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target

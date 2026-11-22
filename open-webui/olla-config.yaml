@@ -1,0 +1,33 @@
+server:
+  host: "0.0.0.0"
+  port: 40114
+  request_logging: true
+
+proxy:
+  engine: "olla" # or "sherpa" for small instances
+  load_balancer: "priority"
+  response_header_timeout: 180s
+
+logging:
+  level: "info"
+  format: "json"
+
+discovery:
+  static:
+    endpoints:
+      - url: "http://ollama:11434"
+        name: "ollama"
+        type: "ollama"
+        priority: 50
+        model_url: "/api/tags"
+        health_check_url: "/"
+        check_interval: 2s
+        check_timeout: 1s
+dashboard:
+  enabled: true
+  access_policy:
+    allowed_hosts:
+      - "*"
+    allowed_cidrs:
+      - "0.0.0.0/0"
+      - "::/0"
