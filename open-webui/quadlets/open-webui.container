@@ -8,19 +8,19 @@ Network=caddy.network
 Pull=never
 Volume=open-webui.volume:/app/backend/data
 Environment=OLLAMA_BASE_URL=http://olla:40114/olla/ollama
-WEBUI_URL=https://ai.${DOMAIN}/
-ENABLE_CALENDAR=False
-ENABLE_CHANNELS=False
-ENABLE_USER_STATUS=False
-ENABLE_SUBAGENTS=True
-SUBAGENTS_BACKGROUND_ENABLED=True
-RAG_EMBEDDING_ENGINE=ollama
-RAG_EMBEDDING_MODEL=nomic-embed-text:latest
-ENABLE_FOLLOW_UP_GENERATION=False
-DEFAULT_PROMPT_SUGGESTIONS=[]
-ENABLE_CODE_EXECUTION=False
-BYPASS_ADMIN_ACCESS_CONTROL=False
-TERMINAL_SERVER_CONNECTIONS=[{"id":"e5050126-7a22-4e5d-af3a-05bdfca2b8d9","url":"http://terminal-container:8000","key":"apikey","name":"Terminal","enabled":true,"auth_type":"bearer","config":{"access_grants":[{"principal_type":"user","principal_id":"*","permission":"read"}]}}]
+Environment=WEBUI_URL=https://ai.${DOMAIN}/
+Environment=ENABLE_CALENDAR=False
+Environment=ENABLE_CHANNELS=False
+Environment=ENABLE_USER_STATUS=False
+Environment=ENABLE_SUBAGENTS=True
+Environment=SUBAGENTS_BACKGROUND_ENABLED=True
+Environment=RAG_EMBEDDING_ENGINE=ollama
+Environment=RAG_EMBEDDING_MODEL=nomic-embed-text:latest
+Environment=ENABLE_FOLLOW_UP_GENERATION=False
+Environment=DEFAULT_PROMPT_SUGGESTIONS=[]
+Environment=ENABLE_CODE_EXECUTION=False
+Environment=BYPASS_ADMIN_ACCESS_CONTROL=False
+Environment=TERMINAL_SERVER_CONNECTIONS=[{"id":"e5050126-7a22-4e5d-af3a-05bdfca2b8d9","url":"http://terminal-container:8000","key":"apikey","name":"Terminal","enabled":true,"auth_type":"bearer","config":{"access_grants":[{"principal_type":"user","principal_id":"*","permission":"read"}]}}]
 Secret=open-webui-secret-key,type=env,target=WEBUI_SECRET_KEY
 
 
@@ -34,6 +34,11 @@ After=olla.container
 
 Requires=podman-secret-gen@open-webui-secret-key.service
 After=podman-secret-gen@open-webui-secret-key.service
+
+Requires=podman-secret-gen@open-webui-oauth-client-id.service
+After=podman-secret-gen@open-webui-oauth-client-id.service
+Requires=podman-secret-gen@open-webui-oauth-client-secret.service
+After=podman-secret-gen@open-webui-oauth-client-secret.service
 
 [Service]
 Restart=always
