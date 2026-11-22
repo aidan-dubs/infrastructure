@@ -4,7 +4,7 @@ ContainerName=ollama
 Environment=OLLAMA_LOAD_TIMEOUT=45m OLLAMA_CONTEXT_LENGTH=32768
 Image=docker.io/ollama/ollama:latest
 Network=open-webui-stack.network
-Pull=never
+Pull=missing
 Volume=ollama.volume:/root/.ollama
 
 [Service]

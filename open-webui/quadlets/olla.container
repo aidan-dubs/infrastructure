@@ -10,8 +10,8 @@ HealthStartPeriod=10s
 HealthTimeout=5s
 Image=ghcr.io/thushan/olla:latest
 Network=open-webui-stack.network
-Pull=never
-Volume=%E/olla/olla-config.yaml:/app/config.yaml:ro,z
+Pull=missing
+Volume=%E/olla/config.yaml:/app/config.yaml:ro,z
 
 [Unit]
 After=caddy.container
