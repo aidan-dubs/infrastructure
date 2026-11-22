@@ -32,7 +32,7 @@ Environment=OAUTH_GROUPS_CLAIM=groups
 Environment=OAUTH_MERGE_ACCOUNTS_BY_EMAIL=False
 Environment=OAUTH_PROVIDER_NAME=Authentik
 Environment=OAUTH_ROLES_CLAIM=groups
-Environment=OAUTH_SCOPES=openid email profile
+Environment="OAUTH_SCOPES=openid email profile"
 Environment=OLLAMA_BASE_URL=http://olla:40114/olla/ollama
 Environment=OPENID_PROVIDER_URL=https://auth.${DOMAIN}/application/o/open-webui/.well-known/openid-configuration
 Environment=PORT=8080
