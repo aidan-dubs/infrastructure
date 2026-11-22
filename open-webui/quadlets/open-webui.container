@@ -8,6 +8,9 @@ Pull=missing
 Volume=open-webui.volume:/app/backend/data
 Environment=OLLAMA_BASE_URL=http://olla:40114/olla/ollama
 Environment=WEBUI_URL=https://ai.${DOMAIN}/
+Environment=HOST=0.0.0.0
+Environment=PORT=8080
+Environment=FORWARDED_ALLOW_IPS=10.12.0.0/16
 Environment=ENABLE_CALENDAR=False
 Environment=ENABLE_CHANNELS=False
 Environment=ENABLE_USER_STATUS=False
