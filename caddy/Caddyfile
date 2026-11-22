@@ -19,7 +19,7 @@
 
 (netbird_only) {
 	@denied not remote_ip 100.64.0.0/10 fd89:ca66:ddec:4ecc::/64
-	respond @denied "Forbidden" 403
+	respond @denied "Forbidden {remote_ip}" 403
 }
 
 (cloudflared_only) {
