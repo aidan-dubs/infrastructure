@@ -10,6 +10,7 @@ Secret=forgejo-oauth2-jwt-secret
 Secret=forgejo-lfs-jwt-secret
 Secret=forgejo-oauth-client-id
 Secret=forgejo-oauth-client-secret
+Secret=forgejo-runner-token
 
 [Service]
 Type=oneshot
@@ -23,6 +24,8 @@ After=authentik.target
 Wants=caddy.container
 After=caddy.container
 
+Requires=podman-secret-gen@forgejo-runner-token.service
+After=podman-secret-gen@forgejo-runner-token.service
 
 Requires=podman-secret-gen@forgejo-secret-key.service
 Requires=podman-secret-gen@forgejo-oauth-client-id.service

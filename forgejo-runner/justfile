@@ -1,0 +1,39 @@
+mod common '../common/justfile'
+
+set lists
+set unstable
+
+[private]
+q-restart: (common::q-restart "forgejo-runner")
+
+install: install-quadlet install-override
+
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
+[private]
+[script]
+install-quadlet:
+    just common install-quadlet forgejo-runner
+    just q-restart
+
+[cache(inputs=split(`find ./podman-secret-gen@forgejo-runner-token.service.d/ -type f `, "\n"))]
+[private]
+[script]
+install-override:
+    sudo install -CD -m 644 -o root -g root \
+      -t /etc/systemd/system/podman-secret-gen@forgejo-runner-token.service.d/ \
+      ./podman-secret-gen@forgejo-runner-token.service.d/*
+    just q-restart
+
+
+[script]
+rotate-secret:
+    sudo systemctl stop podman-secret-gen@forgejo-runner-token.service forgejo-runner forgejo
+    sudo podman secret rm forgejo-runner-token
+    just q-restart
+    just common::q-restart "forgejo"
+
+[script]
+wipe-volume:
+    sudo systemctl stop forgejo-runner
+    sudo podman volume rm forgejo-runner
+    just q-restart

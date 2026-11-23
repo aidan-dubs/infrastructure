@@ -5,6 +5,7 @@ mod authentik
 mod caddy
 mod common
 mod forgejo
+mod forgejo-runner
 mod homarr
 mod netbird
 mod open-webui
@@ -16,7 +17,7 @@ help:
     @just --list
 
 [default]
-all: secrets::install authentik::install caddy::install netbird::install openspeedtest::install  forgejo::install open-webui::install openproject::install homarr::install common::post
+all: secrets::install authentik::install caddy::install netbird::install openspeedtest::install  forgejo::install open-webui::install openproject::install homarr::install common::post forgejo-runner::install
 
 regen-mods:
     for d in */; do [ -f "$d/justfile" ] && echo "mod ${d%/}"; done > mods.just

@@ -1,0 +1,22 @@
+[Container]
+AutoUpdate=registry
+ContainerName=forgejo-runner
+Image=data.forgejo.org/forgejo/runner:13
+UserNS=auto
+Exec=/bin/sh -c "id=$(head -c16 /run/secrets/forgejo-runner-token | od -An -tx1 | tr -d '[:space:]'); exec forgejo-runner daemon --url \"https://forge.$DOMAIN/\" --uuid \"$(echo $id | cut -c1-8)-$(echo $id | cut -c9-12)-$(echo $id | cut -c13-16)-$(echo $id | cut -c17-20)-$(echo $id | cut -c21-32)\" --token-url file:///run/secrets/forgejo-runner-token --label ubuntu-latest:docker://node:20-bookworm"
+Environment=DOCKER_HOST=unix:///run/podman/podman.sock
+Volume=forgejo-runner.volume:/data
+Volume=forgejo-podsock.volume:/run/podman/
+Tmpfs=/tmp:rw,nosuid,nodev,size=64m
+Secret=forgejo-runner-token
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
+
+
+[Unit]
+Requires=podman-secret-gen@forgejo-runner-token.service
+After=podman-secret-gen@forgejo-runner-token.service
