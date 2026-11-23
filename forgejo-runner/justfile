@@ -36,5 +36,5 @@ rotate-secret: install-override
 [script]
 wipe-volume:
     sudo systemctl stop forgejo-runner
-    sudo podman volume rm forgejo-runner
+    sudo podman volume rm forgejo-runner forgejo-podman
     just q-restart

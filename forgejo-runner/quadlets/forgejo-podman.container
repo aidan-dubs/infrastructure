@@ -1,7 +1,6 @@
 [Container]
-AutoUpdate=registry
 ContainerName=forgejo-podman
-Image=quay.io/podman/stable
+Image=forgejo-podman.build
 Exec=podman system service --time=0 unix:///run/podman/podman.sock
 SecurityLabelDisable=true
 Unmask=All

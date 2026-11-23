@@ -1,0 +1,4 @@
+[Build]
+ImageTag=localhost/forgejo-podman
+File=podman.Containerfile
+SetWorkingDirectory=./build/
