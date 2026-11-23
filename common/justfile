@@ -141,7 +141,7 @@ post: tmpfiles selinux restart reload-caddy
 restart:
     sudo systemctl daemon-reload
     f="{{ restart-needed }}"
-    [ -s "$f" ] || exit 0
+    [ -f "$f" ] || exit 0
     sort -u "$f" | xargs -d '\n' -r echo Restarting
     sort -u "$f" | xargs -d '\n' -r sudo systemctl restart
     rm -f "$f"
@@ -149,7 +149,7 @@ restart:
 [script]
 reload-caddy:
     f="{{ caddy-reload }}"
-    [ -s "$f" ] || exit 0
+    [ -f "$f" ] || exit 0
     echo "Reloading caddy"
     sudo systemctl reload caddy
     rm -rf "$f"
@@ -157,7 +157,7 @@ reload-caddy:
 [script]
 tmpfiles:
     f="{{ tmpfiles-reload }}"
-    [ -s "$f" ] || exit 0
+    [ -f "$f" ] || exit 0
     echo "Creating tmpfiles"
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
     rm -rf "$f"
@@ -165,7 +165,7 @@ tmpfiles:
 [script]
 blueprints:
     f="{{ blueprints-reload }}"
-    [ -s "$f" ] || exit 0
+    [ -f "$f" ] || exit 0
     echo "Reloading blueprints"
     sudo systemctl daemon-reload
     sudo systemctl restart auth-secrets
