@@ -21,7 +21,7 @@ q-caddy: common::q-caddy
 [private]
 setup: common::setup
 
-install: install-config install-quadlet install-tmpfiles install-caddy q-restart
+install: install-config install-quadlet install-tmpfiles install-caddy
 
 [cache(inputs=["./app.ini"])]
 [private]

@@ -7,19 +7,24 @@ blueprints-reload := invocation_directory() / ".blueprints-reload"
 selinux-import := invocation_directory() / ".selinux-import"
 tmpfiles-reload := invocation_directory() / ".tmpfiles-reload"
 
+[script]
 q-restart service:
     echo "{{ service }} needs restart"
     echo "{{ service }}" >> "{{ restart-needed }}"
 
+[script]
 q-caddy:
     touch "{{ caddy-reload }}"
 
+[script]
 q-selinux:
     touch "{{ selinux-import }}"
 
+[script]
 q-tmpfiles:
     touch "{{ tmpfiles-reload }}"
 
+[script]
 q-blueprints:
     touch "{{ blueprints-reload }}"
 
@@ -84,7 +89,7 @@ containers-user:
 common-tmpfiles:
     echo "Install common tmpfiles"
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
-    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc 2>/dev/null
 
 post: tmpfiles selinux restart reload-caddy
 
