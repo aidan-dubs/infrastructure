@@ -27,12 +27,12 @@ install-caddyfile:
 [private]
 [script]
 install-tmpfiles:
-    just commmon install-tmpfiles caddy
+    just common install-tmpfiles caddy
     just q-restart
 
 [cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
 [private]
 [script]
 install-selinux:
-    just commmon install-selinux caddy
+    just common install-selinux caddy
     just q-restart

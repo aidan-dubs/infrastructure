@@ -37,20 +37,20 @@ install-quadlet:
 [private]
 [script]
 install-tmpfiles:
-    just commmon install-tmpfiles netbird
+    just common install-tmpfiles netbird
     just q-restart
 
 [cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
 [private]
 [script]
 install-auth:
-    just commmon install-auth netbird
+    just common install-auth netbird
 
 # [cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
 # [private]
 # [script]
 # install-selinux: setup
-#     just commmon install-selinux netbird
+#     just common install-selinux netbird
 
 [confirm("Are you sure you want to reset netbird?")]
 reset:

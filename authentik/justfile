@@ -31,11 +31,11 @@ install-caddyfile:
 [private]
 [script]
 install-tmpfiles:
-    just commmon install-tmpfiles authentik
+    just common install-tmpfiles authentik
     just q-restart
 
 [cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
 [private]
 [script]
 install-auth:
-    just commmon install-auth authentik
+    just common install-auth authentik

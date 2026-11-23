@@ -31,18 +31,18 @@ install-caddyfile:
 [private]
 [script]
 install-tmpfiles:
-    just commmon install-tmpfiles open-webui
+    just common install-tmpfiles open-webui
     just q-restart
 
 [cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
 [private]
 [script]
 install-selinux:
-    just commmon install-selinux open-webui
+    just common install-selinux open-webui
     just q-restart
 
 [cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
 [private]
 [script]
 install-auth:
-    just commmon install-auth open-webui
+    just common install-auth open-webui

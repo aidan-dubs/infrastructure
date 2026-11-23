@@ -36,21 +36,21 @@ install-caddyfile:
 [private]
 [script]
 install-tmpfiles:
-    just commmon install-tmpfiles forgejo
+    just common install-tmpfiles forgejo
     just q-restart
 
 [cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
 [private]
 [script]
 install-selinux:
-    just commmon install-selinux forgejo
+    just common install-selinux forgejo
     just q-restart
 
 [cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
 [private]
 [script]
 install-auth:
-    just commmon install-auth forgejo
+    just common install-auth forgejo
 
 restart:
     sudo systemctl restart forgejo-oauth forgejo
