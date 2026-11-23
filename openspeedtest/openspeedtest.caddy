@@ -4,10 +4,43 @@ import public speedtest {
     }
     header -Alt-Svc
 
-    reverse_proxy openspeedtest:3000 {
-        request_buffers 35MiB
-        transport http {
-            versions 1.1
+        reverse_proxy openspeedtest:3000 {
+            request_buffers 35MiB
+                transport http {
+                    versions 1.1
+                }
         }
-    }
 }
+
+# CNAME to host in Netbird to test over netbird
+import private speedtest {
+    tls {
+        alpn http/1.1
+    }
+    header -Alt-Svc
+
+        reverse_proxy openspeedtest:3000 {
+            request_buffers 35MiB
+                transport http {
+                    versions 1.1
+                }
+        }
+}
+
+
+# Local IP put in netbird to test on LAN
+speedtest.l.{$DOMAIN} {
+    tls {
+        alpn http/1.1
+    }
+    header -Alt-Svc
+
+        reverse_proxy openspeedtest:3000 {
+            request_buffers 35MiB
+                transport http {
+                    versions 1.1
+                }
+        }
+
+}
+
