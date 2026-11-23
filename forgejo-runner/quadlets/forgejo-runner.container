@@ -18,5 +18,7 @@ WantedBy=default.target
 
 
 [Unit]
+Requires=forgejo-podman.service
+After=forgejo-podman.service
 Requires=podman-secret-gen@forgejo-runner-token.service
 After=podman-secret-gen@forgejo-runner-token.service
