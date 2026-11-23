@@ -8,6 +8,30 @@ q-restart: (common::q-restart "forgejo-runner")
 
 install: install-quadlet install-override
 
+
+[cache(inputs=["./runner-config.yaml"])]
+[private]
+[script]
+install-config:
+    echo "Installing Forgejo Runner config"
+    sudo install -CD ./runner-config.yaml /etc/forgejo-runner/
+    just q-restart
+
+[cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
+[private]
+[script]
+install-tmpfiles:
+    just common install-tmpfiles forgejo-runner
+    just q-restart
+
+[cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
+[private]
+[script]
+install-selinux:
+    just common install-selinux forgejo-runner
+    just q-restart
+
+
 [cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
 [private]
 [script]

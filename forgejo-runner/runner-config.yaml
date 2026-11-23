@@ -1,0 +1,46 @@
+---
+log:
+  level: info
+  job_level: info
+
+runner:
+  file: .runner
+  capacity: 1
+  envs:
+  env_file: .env
+  timeout: 3h
+  shutdown_timeout: 3h
+  insecure: false
+  fetch_timeout: 30s
+  fetch_interval: 2s
+  report_interval: 1s
+  labels:
+    runner:
+      backend: docker
+      backend-options:
+        image: node:20-bookworm
+        platform: linux/amd64
+cache:
+  enabled: true
+  port: 0
+  dir: ""
+  external_server: ""
+  secret: ""
+  secret_url: ""
+  host: ""
+  actions_cache_url_override: ""
+
+container:
+  privileged: true
+  options: "--volume /var/lib/containers:/var/lib/containers"
+  workdir_parent:
+  valid_volumes:
+    - /var/lib/containers
+  force_pull: false
+  force_rebuild: false
+
+host:
+  workdir_parent:
+
+server:
+  connections:
