@@ -32,10 +32,13 @@ cache:
 
 container:
   privileged: true
-  options: "--volume /var/lib/containers:/var/lib/containers"
+  options: >
+    --volume /var/lib/containers:/var/lib/containers
+    --volume /var/tmp/buildah-cache:/var/tmp/buildah-cache
   workdir_parent:
   valid_volumes:
     - /var/lib/containers
+    - /var/tmp/buildah-cache
   force_pull: false
   force_rebuild: false
 
