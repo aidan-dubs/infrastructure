@@ -1,0 +1,3 @@
+[Pod]
+PodName=forgejo-runner
+UserNS=auto:size=70000
