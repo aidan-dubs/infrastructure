@@ -9,13 +9,14 @@ mod homarr
 mod netbird
 mod open-webui
 mod openproject
+mod openspeedtest
 mod secrets
 
 help:
     @just --list
 
 [default]
-all: secrets::install authentik::install caddy::install netbird::install  forgejo::install open-webui::install openproject::install homarr::install common::post
+all: secrets::install authentik::install caddy::install netbird::install openspeedtest::install  forgejo::install open-webui::install openproject::install homarr::install common::post
 
 regen-mods:
     for d in */; do [ -f "$d/justfile" ] && echo "mod ${d%/}"; done > mods.just
