@@ -105,7 +105,7 @@ reload-caddy:
     rm -rf "$f"
 
 [script]
-@tmpfiles:
+tmpfiles:
     f="{{ tmpfiles-reload }}"
     [ -s "$f" ] || exit 0
     echo "Creating tmpfiles"
