@@ -2,7 +2,6 @@
 AutoUpdate=registry
 ContainerName=forgejo-podman
 Image=quay.io/podman/stable
-UserNS=auto:size=70000
 Exec=podman system service --time=0 unix:///run/podman/podman.sock
 SecurityLabelDisable=true
 Unmask=All
@@ -11,6 +10,7 @@ AddCapability=All
 Volume=forgejo-runner.volume:/data
 Volume=forgejo-podsock.volume:/run/podman/
 Tmpfs=/tmp:rw,nosuid,nodev,size=64m
+Pod=forgejo-runner.pod
 
 [Service]
 Restart=always
