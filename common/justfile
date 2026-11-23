@@ -135,7 +135,7 @@ common-tmpfiles:
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc 2>/dev/null
 
-post: tmpfiles selinux restart reload-caddy
+post: tmpfiles selinux restart reload-caddy blueprints
 
 [script]
 restart:
