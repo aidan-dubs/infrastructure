@@ -41,8 +41,6 @@ env:
     sudo install -CD -m 644 -o root -g root ./containers/systemd/container.d/10-global-env.conf \
         /etc/containers/systemd/container.d/
 
-    sudo ln -s /etc/environment /etc/environment.d/50-global.conf
-
 # selinux_files := split(`find /etc/custom-selinux -type f`, "\n")
 
 # [cache(inputs=selinux_files)]
