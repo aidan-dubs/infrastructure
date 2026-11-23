@@ -5,6 +5,7 @@ mod authentik
 mod caddy
 mod common
 mod forgejo
+mod homarr
 mod netbird
 mod open-webui
 mod openproject
