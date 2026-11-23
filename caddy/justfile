@@ -20,7 +20,7 @@ install-quadlet:
 [script]
 install-caddyfile:
     echo "Installing Caddyfile"
-    sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
+    sudo install -CD -m 755 -o root -g root ./Caddyfile /etc/caddy/
     just q-caddy
 
 [cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
