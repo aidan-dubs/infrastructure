@@ -10,7 +10,7 @@ help:
     @just --list
 
 [default]
-all: forgejo::install common::post
+all: secrets::install authentik::install caddy::install netbird::install  forgejo::install open-webui::install openproject::install common::post
 
 regen-mods:
     for d in */; do [ -f "$d/justfile" ] && echo "mod ${d%/}"; done > mods.just
