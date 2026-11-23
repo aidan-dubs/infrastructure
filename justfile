@@ -5,6 +5,10 @@ mod authentik
 mod caddy
 mod common
 mod forgejo
+mod netbird
+mod open-webui
+mod openproject
+mod secrets
 
 help:
     @just --list
