@@ -25,7 +25,9 @@ install-caddyfile:
 [private]
 [script]
 install-override:
-    sudo install -CD -m 644 -o root -g root ./podman-secret-gen@homarr-encryption-key.service.d/* /etc/systemd/system/podman-secret-gen@homarr-encryption-key.service.d/
+    sudo install -CD -m 644 -o root -g root \
+      -t /etc/systemd/system/podman-secret-gen@homarr-encryption-key.service.d/ \
+      ./podman-secret-gen@homarr-encryption-key.service.d/*
     just q-restart
 
 
