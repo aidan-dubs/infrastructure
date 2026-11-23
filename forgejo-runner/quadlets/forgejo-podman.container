@@ -2,7 +2,7 @@
 AutoUpdate=registry
 ContainerName=forgejo-podman
 Image=quay.io/podman/stable
-UserNS=auto
+UserNS=auto:size=70000
 Exec=podman system service --time=0 unix:///run/podman/podman.sock
 SecurityLabelDisable=true
 Unmask=All
