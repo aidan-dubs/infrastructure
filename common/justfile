@@ -41,13 +41,13 @@ env:
     sudo install -CD -m 644 -o root -g root ./containers/systemd/container.d/10-global-env.conf \
         /etc/containers/systemd/container.d/
 
-# selinux_files := split(`find /etc/custom-selinux -type f`, "\n")
-
-# [cache(inputs=selinux_files)]
+selinux_files := split(`find /etc/custom-selinux -type f 2>/dev/null || true` , "\n")
 
 [script]
+[cache(inputs=selinux_files)]
 selinux:
     for file in /etc/custom-selinux/*.mods; do
+        [ -e "$file" ] || continue
         sudo semanage import -f "$file"
     done
 
