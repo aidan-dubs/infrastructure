@@ -45,6 +45,12 @@ rotate-secret:
     sudo podman secret rm homarr-encryption-key
     just q-restart
 
+[script]
+rotate-oidc-secrets: install-auth
+    sudo systemctl stop podman-secret-gen@homarr-oauth-client-secret.service podman-secret-gen@homarr-oauth-client-id.service auth-worker
+    sudo podman secret rm homarr-oauth-client-secret homarr-oauth-client-id
+    just q-restart
+    just common::q-restart "auth-worker auth-secrets"
 
 [script]
 wipe-volume:
