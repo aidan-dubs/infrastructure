@@ -21,7 +21,7 @@ install-quadlet:
 install-caddyfile:
     echo "Installing Caddyfile"
     sudo install -CD -m 755 -o root -g root ./Caddyfile /etc/caddy/
-    just q-caddy
+    just common q-caddy
 
 [cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
 [private]
