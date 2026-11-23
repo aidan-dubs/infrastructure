@@ -6,7 +6,7 @@ set unstable
 [private]
 q-restart: (common::q-restart "forgejo-runner")
 
-install: install-quadlet install-override
+install: install-quadlet install-override install-tmpfiles install-selinux install-config
 
 
 [cache(inputs=["./runner-config.yaml"])]
