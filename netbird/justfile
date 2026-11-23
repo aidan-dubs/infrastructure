@@ -28,7 +28,7 @@ install-quadlet:
     just common install-quadlet netbird
     just q-restart
 
-[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[cache(inputs=split(`find ./ -type f -name '*.caddy'`, "\n"))]
 [private]
 @install-caddyfile:
     just common install-caddyfile netbird

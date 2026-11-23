@@ -15,7 +15,7 @@ install-quadlet:
     just common install-quadlet openproject
     just q-restart
 
-[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[cache(inputs=split(`find ./ -type f -name '*.caddy'`, "\n"))]
 [private]
 [script]
 install-caddyfile:

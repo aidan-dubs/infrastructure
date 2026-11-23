@@ -101,7 +101,7 @@ install-caddyfile app: setup
     echo "Installing {{ app }} caddyfiles"
 
     sudo install -CD -m 755 -o root -g root ./*.caddy /etc/caddy/caddy.d/
-    just q-caddy
+    just common q-caddy
 
 [no-cd]
 [script]
@@ -109,7 +109,7 @@ install-tmpfiles app: setup
     echo "Installing {{ app }} tmpfiles"
 
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
-    just q-tmpfiles
+    just common q-tmpfiles
 
 [no-cd]
 [script]
@@ -117,7 +117,7 @@ install-selinux app: setup
     echo "Installing {{ app }} selinux mods"
 
     sudo install -CD -m 755 -o root -g root ./selinux/*.mods /etc/custom-selinux/
-    just q-selinux 
+    just common q-selinux 
 
 [no-cd]
 [script]
@@ -126,7 +126,7 @@ install-auth app: setup
 
     sudo install -CD -m 755 -o root -g root ./authentik/*.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./authentik/*.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
-    just q-blueprints
+    just common q-blueprints
 
 [private]
 [script]
