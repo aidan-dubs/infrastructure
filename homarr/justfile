@@ -43,3 +43,11 @@ install-override:
 rotate-secret:
     sudo systemctl stop podman-secret-gen@homarr-encryption-key.service homarr
     sudo podman secret rm homarr-encryption-key
+    just q-restart
+
+
+[script]
+wipe-volume:
+    sudo systemctl stop homarr
+    sudo podman volume rm homarr
+    just q-restart

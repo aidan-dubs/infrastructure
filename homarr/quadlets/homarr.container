@@ -19,7 +19,7 @@ Environment=AUTH_OIDC_SCOPE_OVERWRITE=openid email profile groups
 Environment=AUTH_OIDC_ISSUER=https://auth.${DOMAIN}/application/o/homarr/
 Environment=AUTH_OIDC_URI=https://auth.${DOMAIN}/application/o/authorize
 Environment=AUTH_PROVIDERS=oidc
-
+Environment=AUTH_OIDC_FORCE_USERINFO=true
 
 
 Secret=homarr-oauth-client-id,type=env,target=AUTH_OIDC_CLIENT_ID
