@@ -93,12 +93,14 @@ restart:
     sort -u "$f" | xargs -d '\n' -r sudo systemctl restart
     rm -f "$f"
 
+[script]
 reload-caddy:
     f="{{ caddy-reload }}"
     [ -s "$f" ] || exit 0
     sudo systemctl reload caddy
     rm -rf "$f"
 
+[script]
 @tmpfiles:
     f="{{ tmpfiles-reload }}"
     [ -s "$f" ] || exit 0
