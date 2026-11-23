@@ -6,7 +6,7 @@ set unstable
 [private]
 q-restart: (common::q-restart "homarr")
 
-install: install-quadlet install-caddyfile install-override
+install: install-quadlet install-caddyfile isntall-auth install-override
 
 [cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
 [private]
