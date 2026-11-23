@@ -21,6 +21,12 @@ install-quadlet:
 install-caddyfile:
     just common install-caddyfile homarr
 
+[cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
+[private]
+[script]
+install-auth:
+    just common install-auth homarr
+
 [cache(inputs=split(`find ./podman-secret-gen@homarr-encryption-key.service.d/ -type f `, "\n"))]
 [private]
 [script]
