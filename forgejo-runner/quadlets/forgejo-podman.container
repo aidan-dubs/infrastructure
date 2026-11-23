@@ -16,6 +16,7 @@ Unmask=All
 Volume=forgejo-podman.volume:/var/lib/containers:U
 Volume=forgejo-podsock.volume:/run/podman/
 Volume=forgejo-runner.volume:/data
+PodmanArgs=--privileged
 
 [Service]
 Restart=always
