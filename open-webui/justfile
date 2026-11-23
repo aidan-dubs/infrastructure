@@ -1,9 +1,48 @@
-open-webui:
-    sudo podman quadlet install --application open-webui-stack --reload-systemd --replace ./quadlets/
+mod common '../common/justfile'
 
-    sudo install -CD ./open-webui.caddy /etc/caddy/caddy.d/
-    sudo install -CD -m 755 -o root -g root ./common/tmpfiles.d/* /etc/tmpfiles.d/
+set lists
+set unstable
+
+[private]
+q-restart: (common::q-restart "open-webui olla ollama terminal-container")
+
+install: install-olla-config install-quadlet install-tmpfiles install-caddyfile
+
+[cache(inputs=["./olla-config.yaml"])]
+[private]
+[script]
+install-olla-config:
     sudo install -CD ./olla-config.yaml /etc/olla/config.yaml
-    sudo install -CD -m 755 -o root -g root ./selinux/open-webui.mods /etc/custom-selinux/
-    sudo install -CD -m 755 -o root -g root ./authentik/open-webui.yaml /etc/authentik/blueprints/
-    sudo install -CD -m 755 -o root -g root ./authentik/open-webui-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
+[private]
+[script]
+install-quadlet:
+    just common install-quadlet open-webui
+    just q-restart
+
+[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[private]
+[script]
+install-caddyfile:
+    just common install-caddyfile open-webui
+
+[cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
+[private]
+[script]
+install-tmpfiles:
+    just commmon install-tmpfiles open-webui
+    just q-restart
+
+[cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
+[private]
+[script]
+install-selinux:
+    just commmon install-selinux open-webui
+    just q-restart
+
+[cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
+[private]
+[script]
+install-auth:
+    just commmon install-auth open-webui

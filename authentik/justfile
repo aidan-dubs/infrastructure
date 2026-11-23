@@ -1,10 +1,41 @@
-install:
+mod common '../common/justfile'
+
+set lists
+set unstable
+
+[private]
+q-restart: (common::q-restart "authentik.target")
+
+install: install-target install-quadlet install-tmpfiles install-caddyfile
+
+[cache(inputs=["./systemd/system/authentik.target"])]
+[private]
+[script]
+install-target:
     sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
 
-    sudo rm -rf /etc/containers/systemd/authentik/
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
+[private]
+[script]
+install-quadlet:
+    just common install-quadlet authentik
+    just q-restart
 
-    sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
+[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[private]
+[script]
+install-caddyfile:
+    just common install-caddyfile authentik
 
-    sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
-    sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
-    sudo install -CD -m 755 -o root -g root ./authentik/main-blueprint.yaml /etc/authentik/blueprints/
+[cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
+[private]
+[script]
+install-tmpfiles:
+    just commmon install-tmpfiles authentik
+    just q-restart
+
+[cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
+[private]
+[script]
+install-auth:
+    just commmon install-auth authentik

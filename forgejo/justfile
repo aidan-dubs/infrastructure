@@ -3,25 +3,10 @@ mod common '../common/justfile'
 set lists
 set unstable
 
-quadlet_files := split(`find ./quadlets -type f | sort`, "\n")
-authentik_files := split(`find ./authentik -type f | sort`, "\n")
-tmpfile_files := split(`find ./tmpfiles.d -type f | sort`, "\n")
-selinux_files := split(`find ./selinux -type f | sort`, "\n")
+[private]
+q-restart: (common::q-restart "forgejo forgejo-oauth")
 
-[private]
-q-restart: (common::q-restart "forgejo")
-[private]
-q-blueprints: common::q-blueprints
-[private]
-q-selinux: common::q-selinux
-[private]
-q-tmpfiles: common::q-tmpfiles
-[private]
-q-caddy: common::q-caddy
-[private]
-setup: common::setup
-
-install: install-config install-quadlet install-tmpfiles install-caddy
+install: install-config install-quadlet install-tmpfiles install-caddyfile
 
 [cache(inputs=["./app.ini"])]
 [private]
@@ -34,50 +19,38 @@ install-config:
     sudo install -CD $TMPFILE /etc/forgejo/app.ini
     just q-restart
 
-[cache(inputs=quadlet_files)]
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
 [private]
 [script]
 install-quadlet:
-    echo "Installing Forgejo quadlets"
-    sudo podman quadlet install --application forgjeo --reload-systemd --replace ./quadlets/
+    just common install-quadlet forgejo
     just q-restart
 
-[cache(inputs=tmpfile_files)]
+[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[private]
+[script]
+install-caddyfile:
+    just common install-caddyfile forgejo
+
+[cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
 [private]
 [script]
 install-tmpfiles:
-    echo "Installing Forgejo tmpfiles"
-    sudo install -CD ./tmpfiles.d/* /etc/tmpfiles.d/
-    just q-tmpfiles
+    just commmon install-tmpfiles forgejo
     just q-restart
 
-[cache(inputs=["./forge.caddy"])]
+[cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
 [private]
 [script]
-install-caddy: setup
-    echo "Installing Forgejo caddyfile"
-    sudo install -CD ./forge.caddy /etc/caddy/caddy.d/
-    just q-caddy
+install-selinux:
+    just commmon install-selinux forgejo
     just q-restart
 
-[cache(inputs=selinux_files)]
+[cache(inputs=split(`find ./authentik/ -type f`, "\n"))]
 [private]
 [script]
-install-selinux: setup
-    echo "Installing Forgejo selinux files"
-    sudo install -CD -m 755 -o root -g root ./selinux/forgejo.mods /etc/custom-selinux/
-    just q-selinux 
-    just q-restart
-
-[cache(inputs=authentik_files)]
-[private]
-[script]
-install-auth: setup
-    echo "Installing Forgejo Authentik files"
-    sudo install -CD -m 755 -o root -g root ./authentik/forgejo.yaml /etc/authentik/blueprints/
-    sudo install -CD -m 755 -o root -g root ./authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
-    just q-blueprints
-    just q-restart
+install-auth:
+    just commmon install-auth forgejo
 
 restart:
     sudo systemctl restart forgejo-oauth forgejo

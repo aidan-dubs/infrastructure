@@ -1,16 +1,20 @@
 set unstable
 set lists
 
-restart-needed := invocation_directory() / ".restart-needed"
-caddy-reload := invocation_directory() / ".caddy-reload"
-blueprints-reload := invocation_directory() / ".blueprints-reload"
-selinux-import := invocation_directory() / ".selinux-import"
-tmpfiles-reload := invocation_directory() / ".tmpfiles-reload"
+repo_root := `git rev-parse --show-toplevel`
+
+restart-needed := repo_root / ".restart-needed"
+caddy-reload := repo_root / ".caddy-reload"
+blueprints-reload := repo_root / ".blueprints-reload"
+selinux-import := repo_root / ".selinux-import"
+tmpfiles-reload := repo_root / ".tmpfiles-reload"
 
 [script]
-q-restart service:
-    echo "{{ service }} needs restart"
-    echo "{{ service }}" >> "{{ restart-needed }}"
+q-restart *services:
+    echo "{{ services }} needs restarting"
+    for s in {{ services }}; do
+        echo "$s" >> "{{ restart-needed }}"
+    done
 
 [script]
 q-caddy:
@@ -48,10 +52,10 @@ env:
     sudo install -CD -m 644 -o root -g root ./containers/systemd/container.d/10-global-env.conf \
         /etc/containers/systemd/container.d/
 
-selinux_files := split(`find /etc/custom-selinux -type f 2>/dev/null || true` , "\n")
+selinux_files := split(`find /etc/custom-selinux -type f 2>/dev/null || true`, "\n")
 
-[script]
 [cache(inputs=selinux_files)]
+[script]
 selinux:
     echo "Import Selinux mods"
     for file in /etc/custom-selinux/*.mods; do
@@ -83,6 +87,46 @@ containers-user:
     else
         echo "{{ pod-user }}:{{ id-range }}" >> /etc/subuid
     fi
+
+[no-cd]
+[script]
+install-quadlet app:
+    echo "Installing {{ app }} quadlets"
+
+    sudo podman quadlet install --application "{{ app }}" --reload-systemd --replace ./quadlets/
+
+[no-cd]
+[script]
+install-caddyfile app: setup
+    echo "Installing {{ app }} caddyfiles"
+
+    sudo install -CD -m 755 -o root -g root ./*.caddy /etc/caddy/caddy.d/
+    just q-caddy
+
+[no-cd]
+[script]
+install-tmpfiles app: setup
+    echo "Installing {{ app }} tmpfiles"
+
+    sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
+    just q-tmpfiles
+
+[no-cd]
+[script]
+install-selinux app: setup
+    echo "Installing {{ app }} selinux mods"
+
+    sudo install -CD -m 755 -o root -g root ./selinux/*.mods /etc/custom-selinux/
+    just q-selinux 
+
+[no-cd]
+[script]
+install-auth app: setup
+    echo "Installing {{ app }} authentik blueprints"
+
+    sudo install -CD -m 755 -o root -g root ./authentik/*.yaml /etc/authentik/blueprints/
+    sudo install -CD -m 755 -o root -g root ./authentik/*.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+    just q-blueprints
 
 [private]
 [script]
@@ -116,4 +160,14 @@ tmpfiles:
     [ -s "$f" ] || exit 0
     echo "Creating tmpfiles"
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+    rm -rf "$f"
+
+[script]
+blueprints:
+    f="{{ blueprints-reload }}"
+    [ -s "$f" ] || exit 0
+    echo "Reloading blueprints"
+    sudo systemctl daemon-reload
+    sudo systemctl restart auth-secrets
+    sudo systemctl reload auth-worker
     rm -rf "$f"

@@ -1,4 +1,22 @@
-install:
-    sudo podman quadlet install --application openproject --reload-systemd --replace ./quadlets/
+mod common '../common/justfile'
 
-    sudo install -CD ./openproject.caddy /etc/caddy/caddy.d/
+set lists
+set unstable
+
+[private]
+q-restart: (common::q-restart "openproject")
+
+install: install-quadlet install-caddyfile
+
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
+[private]
+[script]
+install-quadlet:
+    just common install-quadlet openproject
+    just q-restart
+
+[cache(inputs=split(`find ./ -type f -name '*.caddy', "\n"`))]
+[private]
+[script]
+install-caddyfile:
+    just common install-caddyfile openproject

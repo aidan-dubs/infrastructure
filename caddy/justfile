@@ -1,7 +1,38 @@
-install:
-    sudo podman quadlet install --application caddy --reload-systemd --replace ./caddy/quadlets/
+mod common '../common/justfile'
 
+set lists
+set unstable
 
-    sudo install -CD -m 755 -o root -g root ./caddy/tmpfiles.d/* /etc/tmpfiles.d/
+[private]
+q-restart: (common::q-restart "caddy")
+
+install: install-quadlet install-caddyfile install-tmpfiles install-selinux
+
+[cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
+[private]
+[script]
+install-quadlet:
+    just common install-quadlet caddy
+    just q-restart
+
+[cache(inputs=["./Caddyfile"])]
+[private]
+[script]
+install-caddyfile:
+    echo "Installing Caddyfile"
     sudo install -CD -m 755 -o root -g root ./caddy/Caddyfile /etc/caddy/
-    sudo install -CD -m 755 -o root -g root ./caddy/selinux/caddy.mods /etc/custom-selinux/
+    just q-caddy
+
+[cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
+[private]
+[script]
+install-tmpfiles:
+    just commmon install-tmpfiles caddy
+    just q-restart
+
+[cache(inputs=split(`find ./selinux/ -type f`, "\n"))]
+[private]
+[script]
+install-selinux:
+    just commmon install-selinux caddy
+    just q-restart
