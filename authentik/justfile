@@ -12,7 +12,7 @@ install: install-target install-quadlet install-tmpfiles install-caddyfile
 [private]
 [script]
 install-target:
-    sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
+    sudo install -CD ./systemd/system/authentik.target /etc/systemd/system/
 
 [cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
 [private]
