@@ -12,6 +12,7 @@ Volume=forgejo-podsock.volume:/run/podman/
 Volume=forgejo-podman.volume:/var/lib/containers:U
 Tmpfs=/tmp:rw,nosuid,nodev,size=64m
 Pod=forgejo-runner.pod
+Environment=_CONTAINERS_USE_NATIVE_OVERLAY=1
 
 [Service]
 Restart=always
