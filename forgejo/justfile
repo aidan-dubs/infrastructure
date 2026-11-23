@@ -51,7 +51,7 @@ install-tmpfiles:
 [cache(inputs=["./forge.caddy"])]
 [private]
 [script]
-install-caddy: setup 
+install-caddy: setup
     sudo install -CD ./forge.caddy /etc/caddy/caddy.d/
     just q-caddy
     just q-restart
@@ -59,7 +59,7 @@ install-caddy: setup
 [cache(inputs=selinux_files)]
 [private]
 [script]
-install-selinux: setup 
+install-selinux: setup
     sudo install -CD -m 755 -o root -g root ./selinux/forgejo.mods /etc/custom-selinux/
     just q-selinux 
     just q-restart
@@ -67,7 +67,7 @@ install-selinux: setup
 [cache(inputs=authentik_files)]
 [private]
 [script]
-install-auth: setup 
+install-auth: setup
     sudo install -CD -m 755 -o root -g root ./authentik/forgejo.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
     just q-blueprints

@@ -51,28 +51,28 @@ selinux:
         sudo semanage import -f "$file"
     done
 
+pod-user := "containers"
+id-range := "1000000:1048576"
+
 [cache]
 [private]
 [script]
-@containers-user:
-    RANGE="1000000:1048576"
-    POD_USER=containers
-
-    if ! id -u "${POD_USER}" &>/dev/null; then
-        useradd --create-home --shell /usr/sbin/nologin "${POD_USER}"
-        echo "created user '${POD_USER}'"
+containers-user:
+    if ! id -u "{{ pod-user }}" &>/dev/null; then
+        useradd --create-home --shell /usr/sbin/nologin "{{ pod-user }}"
+        echo "created user '{{ pod-user }}'"
     fi
 
-    if grep -qE "^${POD_USER}:" "/etc/subgid"; then
-        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subgid
+    if grep -qE "^{{ pod-user }}:" "/etc/subgid"; then
+        sed "s/{{ pod-user }}:[[:digit:]]*:[[:digit:]]*$/{{ pod-user }}:{{ id-range }}/" /etc/subgid
     else
-        echo "${POD_USER}:${RANGE}" >> /etc/subgid
+        echo "{{ pod-user }}:{{ id-range }}" >> /etc/subgid
     fi
 
-    if grep -qE "^${POD_USER}:" "/etc/subuid"; then
-        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subuid
+    if grep -qE "^{{ pod-user }}:" "/etc/subuid"; then
+        sed "s/{{ pod-user }}:[[:digit:]]*:[[:digit:]]*$/{{ pod-user }}:{{ id-range }}/" /etc/subuid
     else
-        echo "${POD_USER}:${RANGE}" >> /etc/subuid
+        echo "{{ pod-user }}:{{ id-range }}" >> /etc/subuid
     fi
 
 [private]
@@ -81,7 +81,7 @@ common-tmpfiles:
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
-post: tmpfiles selinux restart reload-caddy 
+post: tmpfiles selinux restart reload-caddy
 
 [script]
 restart:
