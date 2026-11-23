@@ -6,7 +6,7 @@ set unstable
 [private]
 q-restart: (common::q-restart "homarr")
 
-install: install-quadlet install-caddyfile
+install: install-quadlet install-caddyfile install-override
 
 [cache(inputs=split(`find ./quadlets/ -type f`, "\n"))]
 [private]
@@ -20,3 +20,19 @@ install-quadlet:
 [script]
 install-caddyfile:
     just common install-caddyfile homarr
+
+[cache(inputs=split(`find ./podman-secret-gen@homarr-encryption-key.service.d/ -type f `, "\n"))]
+[private]
+[script]
+install-override:
+    sudo install -CD -m 644 -o root -g root ./podman-secret-gen@homarr-encryption-key.service.d/* /etc/systemd/system/podman-secret-gen@homarr-encryption-key.service.d/
+    just q-restart
+
+
+
+
+[script]
+rotate-secret:
+    sudo systemctl stop podman-secret-gen@homarr-encryption-key.service homarr
+    sudo podman secret rm homarr-encryption-key
+    sudo systemctl start homarr
