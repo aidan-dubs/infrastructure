@@ -2,16 +2,20 @@
 ContainerName=forgejo-podman
 Image=forgejo-podman.build
 Exec=podman system service --time=0 unix:///run/podman/podman.sock
-SecurityLabelDisable=true
-Unmask=All
-SeccompProfile=unconfined
 AddCapability=All
-Volume=forgejo-runner.volume:/data
-Volume=forgejo-podsock.volume:/run/podman/
-Volume=forgejo-podman.volume:/var/lib/containers:U
-Tmpfs=/tmp:rw,nosuid,nodev,size=64m
-Pod=forgejo-runner.pod
+AddDevice=/dev/loop-control
+AddDevice=/dev/mapper/control
+AddDevice=/dev/net/tun
 Environment=_CONTAINERS_USE_NATIVE_OVERLAY=1
+Pod=forgejo-runner.pod
+SeccompProfile=unconfined
+SecurityLabelDisable=true
+Sysctl=net.ipv4.ip_forward=1
+Tmpfs=/tmp:rw,nosuid,nodev,size=1024m
+Unmask=All
+Volume=forgejo-podman.volume:/var/lib/containers:U
+Volume=forgejo-podsock.volume:/run/podman/
+Volume=forgejo-runner.volume:/data
 
 [Service]
 Restart=always
