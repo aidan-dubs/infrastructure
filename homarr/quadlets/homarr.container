@@ -31,6 +31,10 @@ After=caddy.service
 
 Requires=podman-secret-gen@homarr-encryption-key.service
 After=podman-secret-gen@homarr-encryption-key.service
+Requires=podman-secret-gen@homarr-oauth-client-id.service
+Requires=podman-secret-gen@homarr-oauth-client-secret.service
+After=podman-secret-gen@homarr-oauth-client-id.service
+After=podman-secret-gen@homarr-oauth-client-secret.service
 
 [Service]
 Restart=always
