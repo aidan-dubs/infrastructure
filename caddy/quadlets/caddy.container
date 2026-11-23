@@ -14,7 +14,7 @@ Volume=caddy_data.volume:/data:U
 Volume=caddy_config.volume:/config:U
 ReloadCmd=caddy reload --config /etc/caddy/Caddyfile --force
 
-HealthCmd=wget -q --spider http://localhost:2019/config/
+HealthCmd=wget -q --spider http://127.0.0.1:2019/config/
 HealthInterval=30s
 HealthTimeout=5s
 HealthRetries=3
