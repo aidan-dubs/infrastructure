@@ -14,7 +14,7 @@ install: install-quadlet install-override install-tmpfiles install-selinux insta
 [script]
 install-config:
     echo "Installing Forgejo Runner config"
-    sudo install -CD ./runner-config.yaml /etc/forgejo-runner/
+    sudo install -CD -t /etc/forgejo-runner/ ./runner-config.yaml 
     just q-restart
 
 [cache(inputs=split(`find ./tmpfiles.d/ -type f`, "\n"))]
