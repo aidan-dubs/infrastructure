@@ -9,6 +9,7 @@ SeccompProfile=unconfined
 AddCapability=All
 Volume=forgejo-runner.volume:/data
 Volume=forgejo-podsock.volume:/run/podman/
+Volume=forgejo-podman.volume:/var/lib/containers:U
 Tmpfs=/tmp:rw,nosuid,nodev,size=64m
 Pod=forgejo-runner.pod
 
