@@ -4,7 +4,7 @@ set lists
 set unstable
 
 [private]
-q-restart: (common::q-restart "forgejo-runner")
+q-restart: (common::q-restart "forgejo-runner-pod")
 
 install: install-quadlet install-override install-tmpfiles install-selinux install-config
 
