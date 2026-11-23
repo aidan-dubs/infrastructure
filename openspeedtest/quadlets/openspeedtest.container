@@ -1,6 +1,7 @@
 [Container]
 ContainerName=openspeedtest
 Image=docker.io/openspeedtest/latest:latest
+Network=caddy.network
 
 [Service]
 Restart=always
