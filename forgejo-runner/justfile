@@ -23,10 +23,11 @@ install-override:
       -t /etc/systemd/system/podman-secret-gen@forgejo-runner-token.service.d/ \
       ./podman-secret-gen@forgejo-runner-token.service.d/*
     just q-restart
+    just common::q-restart "forgejo"
 
 
 [script]
-rotate-secret:
+rotate-secret: install-override
     sudo systemctl stop podman-secret-gen@forgejo-runner-token.service forgejo-runner forgejo
     sudo podman secret rm forgejo-runner-token
     just q-restart
