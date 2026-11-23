@@ -27,6 +27,7 @@ install: install-config install-quadlet install-tmpfiles install-caddy q-restart
 [private]
 [script]
 install-config:
+    echo "Installing Forgejo config"
     TMPFILE=$(mktemp --suffix .conf) || exit 1
     trap 'rm -f "$TMPFILE"' EXIT
     envsubst '$DOMAIN' < ./app.ini > $TMPFILE
@@ -37,6 +38,7 @@ install-config:
 [private]
 [script]
 install-quadlet:
+    echo "Installing Forgejo quadlets"
     sudo podman quadlet install --application forgjeo --reload-systemd --replace ./quadlets/
     just q-restart
 
@@ -44,6 +46,7 @@ install-quadlet:
 [private]
 [script]
 install-tmpfiles:
+    echo "Installing Forgejo tmpfiles"
     sudo install -CD ./tmpfiles.d/* /etc/tmpfiles.d/
     just q-tmpfiles
     just q-restart
@@ -52,6 +55,7 @@ install-tmpfiles:
 [private]
 [script]
 install-caddy: setup
+    echo "Installing Forgejo caddyfile"
     sudo install -CD ./forge.caddy /etc/caddy/caddy.d/
     just q-caddy
     just q-restart
@@ -60,6 +64,7 @@ install-caddy: setup
 [private]
 [script]
 install-selinux: setup
+    echo "Installing Forgejo selinux files"
     sudo install -CD -m 755 -o root -g root ./selinux/forgejo.mods /etc/custom-selinux/
     just q-selinux 
     just q-restart
@@ -68,6 +73,7 @@ install-selinux: setup
 [private]
 [script]
 install-auth: setup
+    echo "Installing Forgejo Authentik files"
     sudo install -CD -m 755 -o root -g root ./authentik/forgejo.yaml /etc/authentik/blueprints/
     sudo install -CD -m 755 -o root -g root ./authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
     just q-blueprints

@@ -27,6 +27,7 @@ setup: env containers-user common-tmpfiles
 [private]
 [script]
 env:
+    echo "Setup Env"
     : "${DOMAIN:?DOMAIN is unset. Add it to a .env file}"
 
     TMPFILE=$(mktemp --suffix .conf) || exit 1
@@ -46,6 +47,7 @@ selinux_files := split(`find /etc/custom-selinux -type f 2>/dev/null || true` , 
 [script]
 [cache(inputs=selinux_files)]
 selinux:
+    echo "Import Selinux mods"
     for file in /etc/custom-selinux/*.mods; do
         [ -e "$file" ] || continue
         sudo semanage import -f "$file"
@@ -58,6 +60,7 @@ id-range := "1000000:1048576"
 [private]
 [script]
 containers-user:
+    echo "Create containers subuid/gid range"
     if ! id -u "{{ pod-user }}" &>/dev/null; then
         useradd --create-home --shell /usr/sbin/nologin "{{ pod-user }}"
         echo "created user '{{ pod-user }}'"
@@ -78,6 +81,7 @@ containers-user:
 [private]
 [script]
 common-tmpfiles:
+    echo "Install common tmpfiles"
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
 
@@ -88,6 +92,7 @@ restart:
     sudo systemctl daemon-reload
     f="{{ restart-needed }}"
     [ -s "$f" ] || exit 0
+    sort -u "$f" | xargs -d '\n' -r echo Restarting
     sort -u "$f" | xargs -d '\n' -r sudo systemctl restart
     rm -f "$f"
 
@@ -95,6 +100,7 @@ restart:
 reload-caddy:
     f="{{ caddy-reload }}"
     [ -s "$f" ] || exit 0
+    echo "Reloading caddy"
     sudo systemctl reload caddy
     rm -rf "$f"
 
@@ -102,5 +108,6 @@ reload-caddy:
 @tmpfiles:
     f="{{ tmpfiles-reload }}"
     [ -s "$f" ] || exit 0
-    sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
+    echo "Creating tmpfiles"
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
     rm -rf "$f"
