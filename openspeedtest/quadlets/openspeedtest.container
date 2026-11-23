@@ -3,7 +3,6 @@ ContainerName=openspeedtest
 Image=docker.io/openspeedtest/latest:latest
 Network=caddy.network
 PublishPort=3228:3000
-Publish
 
 [Service]
 Restart=always
