@@ -10,7 +10,7 @@ help:
     @just --list
 
 [default]
-all: forgejo::install common::restart common::reload-caddy
+all: forgejo::install common::post
 
 regen-mods:
     for d in */; do [ -f "$d/justfile" ] && echo "mod ${d%/}"; done > mods.just

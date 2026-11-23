@@ -51,8 +51,6 @@ selinux:
         sudo semanage import -f "$file"
     done
 
-post: tmpfiles selinux restart
-
 [cache]
 [private]
 [script]
@@ -82,6 +80,8 @@ post: tmpfiles selinux restart
 common-tmpfiles:
     sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
     sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+
+post: tmpfiles selinux restart reload-caddy 
 
 [script]
 restart:
