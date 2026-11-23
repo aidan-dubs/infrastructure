@@ -1,0 +1,13 @@
+import public speedtest {
+    tls {
+        alpn http/1.1
+    }
+    header -Alt-Svc
+
+    reverse_proxy openspeedtest:3000 {
+        request_buffers 35MiB
+        transport http {
+            versions 1.1
+        }
+    }
+}

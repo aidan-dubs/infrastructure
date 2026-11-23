@@ -1,0 +1,9 @@
+[Container]
+ContainerName=openspeedtest
+Image=docker.io/openspeedtest/latest:latest
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=default.target
