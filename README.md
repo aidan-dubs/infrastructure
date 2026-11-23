@@ -16,11 +16,13 @@ podman quadlets. I have a single Dell Poweredge r730 running a Fedora IoT editio
 - [ ] Homarr
 - [ ] Smallstep
 - [ ] Syncthing
-- [ ] OpenWebui
-  - [ ] Olla
-  - [ ] Ollama
-  - [ ] Terminal
+- [X] OpenWebui
+  - [X] Olla
+  - [X] Ollama
+  - [X] Terminal
 - [ ] Mail
+- [ ] Jellyfin
+- [ ] Immich
 
 **Features part of each service**
 

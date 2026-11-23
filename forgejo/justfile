@@ -1,0 +1,67 @@
+mod common '../common/justfile'
+
+set lists
+set unstable
+
+quadlet_files := split(`find ./quadlets -type f | sort`, "\n")
+authentik_files := split(`find ./authentik -type f | sort`, "\n")
+tmpfile_files := split(`find ./tmpfiles.d -type f | sort`, "\n")
+selinux_files := split(`find ./selinux -type f | sort`, "\n")
+
+[private]
+q-restart: (common::q-restart "forgejo")
+[private]
+q-blueprints: common::q-blueprints
+[private]
+q-selinux: common::q-selinux
+[private]
+q-tmpfiles: common::q-tmpfiles
+[private]
+q-caddy: common::q-caddy
+[private]
+setup: common::setup
+
+install: install-config install-quadlet install-tmpfiles install-caddy q-restart
+
+[cache(inputs=["./app.ini"])]
+[private]
+[script]
+install-config: && q-restart
+    TMPFILE=$(mktemp --suffix .conf) || exit 1
+    trap 'rm -f "$TMPFILE"' EXIT
+    envsubst '$DOMAIN' < ./app.ini > $TMPFILE
+    sudo install -CD $TMPFILE /etc/forgejo/app.ini
+
+[cache(inputs=quadlet_files)]
+[private]
+[script]
+install-quadlet: && q-restart
+    sudo podman quadlet install --application forgjeo --reload-systemd --replace ./quadlets/
+
+[cache(inputs=tmpfile_files)]
+[private]
+[script]
+install-tmpfiles: && q-tmpfiles q-restart
+    sudo install -CD ./tmpfiles.d/* /etc/tmpfiles.d/
+
+[cache(inputs=["./forge.caddy"])]
+[private]
+[script]
+install-caddy: setup && q-caddy q-restart
+    sudo install -CD ./forge.caddy /etc/caddy/caddy.d/
+
+[cache(inputs=selinux_files)]
+[private]
+[script]
+install-selinux: setup && q-selinux q-restart
+    sudo install -CD -m 755 -o root -g root ./selinux/forgejo.mods /etc/custom-selinux/
+
+[cache(inputs=authentik_files)]
+[private]
+[script]
+install-auth: setup && q-blueprints q-restart
+    sudo install -CD -m 755 -o root -g root ./authentik/forgejo.yaml /etc/authentik/blueprints/
+    sudo install -CD -m 755 -o root -g root ./authentik/forgejo-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+
+restart:
+    sudo systemctl restart forgejo-oauth forgejo

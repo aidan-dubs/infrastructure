@@ -14,8 +14,8 @@ Pull=missing
 Volume=%E/olla/config.yaml:/app/config.yaml:ro,z
 
 [Unit]
-After=caddy.container
-After=ollama.container
+After=caddy.service
+After=ollama.service
 
 [Service]
 Restart=always

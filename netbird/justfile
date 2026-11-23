@@ -1,0 +1,23 @@
+
+install:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    sudo podman quadlet install --application netbird --reload-systemd --replace ./quadlets/
+
+    TMPFILE=$(mktemp --suffix .conf) || exit 1
+    trap 'rm -f "$TMPFILE"' EXIT
+
+    envsubst '$DOMAIN' < ./config.yaml > $TMPFILE
+    sudo install -CD -m 755 -o root -g root $TMPFILE /etc/netbird/config.yaml
+
+    sudo install -CD ./netbird.caddy /etc/caddy/caddy.d/
+    sudo install -CD ./tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/netbird.yaml /etc/authentik/blueprints/
+    sudo install -CD -m 755 -o root -g root ./authentik/netbird-secret.conf /etc/containers/systemd/authentik/auth-secrets.container.d/
+
+[confirm("Are you sure you want to reset netbird?")]
+reset:
+    sudo systemctl stop netbird-server netbird-dashboard netbird-provisioner
+    sudo podman volume rm netbird-data netbird-pat
+    sudo systemctl start netbird-server netbird-dashboard netbird-provisioner-build netbird-provisioner

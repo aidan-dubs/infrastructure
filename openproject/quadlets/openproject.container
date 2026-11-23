@@ -20,6 +20,11 @@ Restart=always
 WantedBy=default.target
 
 [Unit]
+Wants=authentik.target
+After=authentik.target
+Wants=caddy.service
+After=caddy.service
+
 Requires=podman-secret-gen@openproject-key-base.service
 After=podman-secret-gen@openproject-key-base.service
 Requires=podman-secret-gen@openproject-bootstrap-pass.service

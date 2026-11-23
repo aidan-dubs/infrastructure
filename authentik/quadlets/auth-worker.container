@@ -2,9 +2,7 @@
 ContainerName=auth-worker
 Environment=AUTHENTIK_POSTGRESQL__HOST=auth-db
 Environment=AUTHENTIK_POSTGRESQL__NAME=authentik
-; Environment=AUTHENTIK_POSTGRESQL__PASSWORD=PG_PASS
 Environment=AUTHENTIK_POSTGRESQL__USER=authentik
-; Environment="AUTHENTIK_SECRET_KEY=secret key required"
 Environment=DOCKER_HOST=tcp://socket-proxy:2375
 Exec=worker
 Image=ghcr.io/goauthentik/server:2026.8.5
@@ -19,6 +17,16 @@ Volume=/etc/authentik/blueprints:/blueprints/custom:ro,z
 Volume=auth-secrets.volume:/secrets:ro,z
 Network=auth.network
 
+HealthCmd=ak healthcheck
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=60s
+Notify=healthy
+
+ReloadCmd=ak shell -c "from authentik.blueprints.models import BlueprintInstance; from authentik.blueprints.v1.tasks import apply_blueprint; [apply_blueprint.send(str(bp.pk)) for bp in BlueprintInstance.objects.filter(enabled=True)]"
+
+
 [Service]
 Restart=always
 
@@ -29,7 +37,6 @@ WantedBy=authentik.target
 [Unit]
 Wants=auth-secrets.service
 After=auth-secrets.service
-
 
 PartOf=authentik.target
 Requires=auth-sockproxy.service auth-db.service

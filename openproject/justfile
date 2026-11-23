@@ -1,0 +1,4 @@
+install:
+    sudo podman quadlet install --application openproject --reload-systemd --replace ./quadlets/
+
+    sudo install -CD ./openproject.caddy /etc/caddy/caddy.d/

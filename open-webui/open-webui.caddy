@@ -1,4 +1,4 @@
 # Dashboard
-import public ai {
+import public prompt {
     reverse_proxy open-webui:8080
 }

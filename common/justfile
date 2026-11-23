@@ -1,0 +1,106 @@
+set unstable
+set lists
+
+restart-needed := invocation_directory() / ".restart-needed"
+caddy-reload := invocation_directory() / ".caddy-reload"
+blueprints-reload := invocation_directory() / ".blueprints-reload"
+selinux-import := invocation_directory() / ".selinux-import"
+tmpfiles-reload := invocation_directory() / ".tmpfiles-reload"
+
+q-restart service:
+    echo "{{ service }}" >> "{{ restart-needed }}"
+
+q-caddy:
+    touch "{{ caddy-reload }}"
+
+q-selinux:
+    touch "{{ selinux-import }}"
+
+q-tmpfiles:
+    touch "{{ tmpfiles-reload }}"
+
+q-blueprints:
+    touch "{{ blueprints-reload }}"
+
+setup: env containers-user common-tmpfiles
+
+[private]
+[script]
+env:
+    : "${DOMAIN:?DOMAIN is unset. Add it to a .env file}"
+
+    TMPFILE=$(mktemp --suffix .conf) || exit 1
+    trap 'rm -f "$TMPFILE"' EXIT
+
+    envsubst '$DOMAIN' < ./environment > $TMPFILE
+    sudo install -CD -m 644 -o root -g root $TMPFILE /etc/environment
+
+    sudo install -CD -m 644 -o root -g root ./systemd/system.conf.d/10-global-env.conf \
+        /etc/systemd/system.conf.d/
+
+    sudo install -CD -m 644 -o root -g root ./containers/systemd/container.d/10-global-env.conf \
+        /etc/containers/systemd/container.d/
+
+    sudo ln -s /etc/environment /etc/environment.d/50-global.conf
+
+# selinux_files := split(`find /etc/custom-selinux -type f`, "\n")
+
+# [cache(inputs=selinux_files)]
+
+[script]
+selinux:
+    for file in /etc/custom-selinux/*.mods; do
+        sudo semanage import -f "$file"
+    done
+
+post: tmpfiles selinux restart
+
+[cache]
+[private]
+[script]
+@containers-user:
+    RANGE="1000000:1048576"
+    POD_USER=containers
+
+    if ! id -u "${POD_USER}" &>/dev/null; then
+        useradd --create-home --shell /usr/sbin/nologin "${POD_USER}"
+        echo "created user '${POD_USER}'"
+    fi
+
+    if grep -qE "^${POD_USER}:" "/etc/subgid"; then
+        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subgid
+    else
+        echo "${POD_USER}:${RANGE}" >> /etc/subgid
+    fi
+
+    if grep -qE "^${POD_USER}:" "/etc/subuid"; then
+        sed "s/${POD_USER}:[[:digit:]]*:[[:digit:]]*$/${POD_USER}:${RANGE}/" /etc/subuid
+    else
+        echo "${POD_USER}:${RANGE}" >> /etc/subuid
+    fi
+
+[private]
+[script]
+common-tmpfiles:
+    sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
+    sudo systemd-tmpfiles --create --prefix=/var --prefix=/etc
+
+[script]
+restart:
+    sudo systemctl daemon-reload
+    f="{{ restart-needed }}"
+    [ -s "$f" ] || exit 0
+    sort -u "$f" | xargs -d '\n' -r sudo systemctl restart
+    rm -f "$f"
+
+reload-caddy:
+    f="{{ caddy-reload }}"
+    [ -s "$f" ] || exit 0
+    sudo systemctl reload caddy
+    rm -rf "$f"
+
+@tmpfiles:
+    f="{{ tmpfiles-reload }}"
+    [ -s "$f" ] || exit 0
+    sudo install -CD -m 755 -o root -g root ./tmpfiles.d/* /etc/tmpfiles.d/
+    rm -rf "$f"

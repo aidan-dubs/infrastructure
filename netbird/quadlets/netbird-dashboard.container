@@ -21,6 +21,11 @@ Restart=always
 WantedBy=default.target
 
 [Unit]
+Wants=authentik.target
+After=authentik.target
+Requires=caddy.service
+After=caddy.service
+
 Requires=podman-secret-gen@netbird-oauth-client-id.service
 After=podman-secret-gen@netbird-oauth-client-id.service
 Requires=podman-secret-gen@netbird-oauth-client-secret.service

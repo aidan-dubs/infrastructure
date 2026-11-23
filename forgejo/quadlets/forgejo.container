@@ -12,6 +12,14 @@ Secret=forgejo-internal-token
 Secret=forgejo-oauth2-jwt-secret
 Secret=forgejo-lfs-jwt-secret
 Network=caddy.network
+Notify=healthy
+
+HealthCmd=curl -fsS http://localhost:3000/api/healthz
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=3
+HealthStartPeriod=60s
+HealthOnFailure=restart
 
 [Service]
 Restart=always

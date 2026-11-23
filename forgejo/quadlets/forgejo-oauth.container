@@ -18,6 +18,12 @@ RemainAfterExit=yes
 [Unit]
 PartOf=forgejo.service
 
+Wants=authentik.target
+After=authentik.target
+Wants=caddy.container
+After=caddy.container
+
+
 Requires=podman-secret-gen@forgejo-secret-key.service
 Requires=podman-secret-gen@forgejo-oauth-client-id.service
 Requires=podman-secret-gen@forgejo-oauth-client-secret.service

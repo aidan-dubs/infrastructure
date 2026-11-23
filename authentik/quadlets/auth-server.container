@@ -18,6 +18,13 @@ Network=caddy.network
 Volume=/etc/authentik/blueprints:/blueprints/custom:Z
 UserNS=auto
 
+HealthCmd=ak healthcheck
+HealthInterval=30s
+HealthTimeout=10s
+HealthRetries=3
+HealthStartPeriod=60s
+Notify=healthy
+
 [Service]
 Restart=always
 

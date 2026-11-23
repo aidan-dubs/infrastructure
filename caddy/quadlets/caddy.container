@@ -14,8 +14,19 @@ Volume=caddy_data.volume:/data
 Volume=caddy_config.volume:/config
 ReloadCmd=caddy reload --config /etc/caddy/Caddyfile --force
 
+HealthCmd=wget -q --spider http://localhost:2019/config/
+HealthInterval=30s
+HealthTimeout=5s
+HealthRetries=3
+HealthStartPeriod=30s
+HealthOnFailure=kill
+Notify=healthy
+
 [Service]
 Restart=always
+TimeoutStartSec=300
+
+[Unit]
 Requires=podman-secret-exists@cloudflare_api_token.service
 After=podman-secret-exists@cloudflare_api_token.service
 

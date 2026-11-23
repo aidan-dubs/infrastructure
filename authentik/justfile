@@ -1,0 +1,10 @@
+install:
+    sudo install -CD ./authentik/systemd/system/authentik.target /etc/systemd/system/
+
+    sudo rm -rf /etc/containers/systemd/authentik/
+
+    sudo podman quadlet install --application authentik --reload-systemd --replace ./authentik/quadlets/
+
+    sudo install -CD ./authentik/authentik.caddy /etc/caddy/caddy.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/tmpfiles.d/* /etc/tmpfiles.d/
+    sudo install -CD -m 755 -o root -g root ./authentik/main-blueprint.yaml /etc/authentik/blueprints/
