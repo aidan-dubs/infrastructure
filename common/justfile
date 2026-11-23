@@ -8,6 +8,7 @@ selinux-import := invocation_directory() / ".selinux-import"
 tmpfiles-reload := invocation_directory() / ".tmpfiles-reload"
 
 q-restart service:
+    echo "{{ service }} needs restart"
     echo "{{ service }}" >> "{{ restart-needed }}"
 
 q-caddy:
