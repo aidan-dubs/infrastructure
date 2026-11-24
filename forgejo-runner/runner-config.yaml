@@ -35,6 +35,7 @@ container:
   options: >
     --volume /var/lib/containers:/var/lib/containers
     --volume /var/tmp/buildah-cache:/var/tmp/buildah-cache
+    --userns=host
   workdir_parent:
   valid_volumes:
     - /var/lib/containers
