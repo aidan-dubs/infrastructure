@@ -56,7 +56,7 @@ entries:
     attrs:
       name: Open WebUI
       provider: !KeyOf open-webui-oauth-provider
-      meta_launch_url: !Format ["https://ai.%s", !Env DOMAIN]
+      meta_launch_url: !Format ["https://prompt.%s", !Env DOMAIN]
   - model: authentik_policies.policybinding
     identifiers:
       target: !Find [authentik_core.application, [slug, open-webui]]
