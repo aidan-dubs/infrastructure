@@ -43,7 +43,7 @@ Environment=SUBAGENTS_BACKGROUND_ENABLED=True
 Environment=TERMINAL_SERVER_CONNECTIONS='[{"id":"e5050126-7a22-4e5d-af3a-05bdfca2b8d9","url":"http://terminal-container:8000","key":"apikey","name":"Terminal","enabled":true,"auth_type":"bearer","config":{"access_grants":[{"principal_type":"user","principal_id":"*","permission":"read"}]}}]'
 Environment=WEBUI_NAME=Prompt Environment=FORWARDED_ALLOW_IPS=10.12.0.0/16
 Environment=WEBUI_SESSION_COOKIE_SECURE=True
-Environment=WEBUI_URL=https://ai.${DOMAIN}/
+Environment=WEBUI_URL=https://prompt.${DOMAIN}/
 
 Secret=open-webui-oauth-client-id,type=env,target=OAUTH_CLIENT_ID
 Secret=open-webui-oauth-client-secret,type=env,target=OAUTH_CLIENT_SECRET
