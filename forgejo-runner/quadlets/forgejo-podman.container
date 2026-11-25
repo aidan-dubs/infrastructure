@@ -15,6 +15,7 @@ Tmpfs=/tmp:rw,nosuid,nodev,size=1024m
 Unmask=All
 Volume=forgejo-podman.volume:/var/lib/containers
 Volume=forgejo-buildah.volume:/var/tmp/buildah-cache
+Volume=forgejo-image-builder.volume:/var/cache/image-builder/
 Volume=forgejo-podsock.volume:/run/podman/
 PodmanArgs=--privileged
 

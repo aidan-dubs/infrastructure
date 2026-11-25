@@ -35,11 +35,13 @@ container:
   options: >
     --volume /var/lib/containers:/var/lib/containers
     --volume /var/tmp/buildah-cache:/var/tmp/buildah-cache
+    --volume /var/cache/image-builder/:/var/cache/image-builder/
     --userns=host
   workdir_parent:
   valid_volumes:
     - /var/lib/containers
     - /var/tmp/buildah-cache
+    - /var/cache/image-builder/
   force_pull: false
   force_rebuild: false
 
