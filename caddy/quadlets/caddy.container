@@ -3,7 +3,7 @@ AddCapability=NET_ADMIN
 AutoUpdate=registry
 ContainerName=caddy
 UserNS=auto
-Image=caddy.build
+Image=localhost/caddy:latest
 Network=caddy.network:ip=10.12.0.2
 PublishPort=0.0.0.0:80:80
 PublishPort=0.0.0.0:443:443
