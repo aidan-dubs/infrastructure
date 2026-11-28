@@ -2,3 +2,7 @@
 PodName=authentik
 UserNS=host
 Network=auth.network
+
+[Install]
+WantedBy=default.target
+WantedBy=authentik.target
