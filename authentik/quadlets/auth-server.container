@@ -15,6 +15,7 @@ Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
 Secret=AUTHENTIK_BOOTSTRAP_PASSWORD,type=env,target=AUTHENTIK_BOOTSTRAP_PASSWORD
 Network=caddy.network
+Network=auth.network
 Volume=/etc/authentik/blueprints:/blueprints/custom:Z
 
 HealthCmd=ak healthcheck
