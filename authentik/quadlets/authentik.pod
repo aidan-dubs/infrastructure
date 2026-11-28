@@ -1,0 +1,4 @@
+[Pod]
+PodName=authentik
+UserNS=host
+Network=auth.network

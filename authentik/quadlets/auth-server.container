@@ -8,15 +8,14 @@ Environment=AUTHENTIK_BOOTSTRAP_EMAIL=admin@${DOMAIN}
 Exec=server
 Image=ghcr.io/goauthentik/server:2026.8.7
 ShmSize=512mb
-Volume=auth-data.volume:/data
+Pod=authentik.pod
+Volume=auth-data.volume:/data:U
 Volume=auth-templates.volume:/templates
 Secret=PG_PASS,type=env,target=AUTHENTIK_POSTGRESQL__PASSWORD
 Secret=AUTHENTIK_SECRET_KEY,type=env,target=AUTHENTIK_SECRET_KEY
 Secret=AUTHENTIK_BOOTSTRAP_PASSWORD,type=env,target=AUTHENTIK_BOOTSTRAP_PASSWORD
-Network=auth.network
 Network=caddy.network
 Volume=/etc/authentik/blueprints:/blueprints/custom:Z
-UserNS=auto
 
 HealthCmd=ak healthcheck
 HealthInterval=30s

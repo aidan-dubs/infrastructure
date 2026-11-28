@@ -8,8 +8,7 @@ Environment=POST=1
 Volume=/run/podman/podman.sock:/var/run/docker.sock:ro
 ReadOnly=true
 Tmpfs=/run:rw,mode=1777
-Network=auth.network
-UserNS=auto
+Pod=authentik.pod
 
 [Install]
 WantedBy=default.target
